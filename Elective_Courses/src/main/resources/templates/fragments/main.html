@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<main role="main" th:fragment="main">
+
+    <div class="album py-5 bg-light">
+        <div class="container">
+
+            <div th:insert="fragments/electiveCourseList.html :: electiveCourseList	"></div>
+			<br/>
+            <div th:insert="fragments/electiveCourseForm.html :: electiveCourseForm"></div>
+
+        </div>
+    </div>
+
+</main>
+
+</body>
+</html>
