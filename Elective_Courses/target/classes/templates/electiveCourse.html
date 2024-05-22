@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head>
+<meta charset="UTF-8">
+<title>Elective Course Data</title>
+</head>
+<body>
+	<h1>Course  Details:</h1>
+	Title:
+	<b th:text="${electiveCourse.title}"></b>
+	<br /> 
+	Max number of attandies:
+	<b th:text="${electiveCourse.maxAllowedStudents}"></b>
+	<br />
+	Year of study:
+	<b th:text="${electiveCourse.studyYear}"></b>
+	<br />
+	Cathegory:
+	<b th:text="${electiveCourse.categoryId}"></b>
+	<br />
+	Teacher:
+	<b th:text="${electiveCourse.teacherName}"></b>
+	<br />
+</body>
+</html>

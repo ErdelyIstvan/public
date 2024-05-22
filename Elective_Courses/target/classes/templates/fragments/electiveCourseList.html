@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
+
+<body>
+	<div th:fragment="electiveCourseList">
+	    <div class="row">
+	        <div class="col-md-4">
+	            <h3>Elective Courses</h3>
+	        </div>
+	    </div>
+
+	    <div class="row">
+	        <div class="col-md-4" th:if="${electiveCourses.isEmpty()}">
+	            <div class="alert alert-warning" role="alert">
+	                No elective course defined yet.
+	            </div>
+	        </div>
+		</div>
+		<table>
+			<tr>
+				<th>Id</th>
+				<th>Title</th>
+				<th>Max allowed students</th>
+				<th>Year of study</th>
+				<th>Category</th>
+				<th>Teacher</th>
+				<th>Delete</th>
+			</tr>
+			<tr th:each="electiveCourse:${electiveCourses}">
+				<td th:text="${electiveCourse.id}"></td>
+				<td th:text="${electiveCourse.title}"></td>
+				<td th:text="${electiveCourse.maxAllowedStudents}"></td>
+				<td th:text="${electiveCourse.studyYear}"></td>
+				<td th:text="${electiveCourse.category.category}"></td>
+				<td th:text="${electiveCourse.teacherName}"></td>
+				<td>	
+					<form action="#" th:action="@{/delete-elective-course}" method="post">
+				    	<input type="hidden" name="id" th:value="${electiveCourse.id}"/>
+				    	<input type="submit" class="btn btn-danger" value="Delete"/>
+					</form>
+				</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

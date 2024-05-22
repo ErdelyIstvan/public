@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
+
+<body>
+	<div th:fragment="electiveCourseForm">
+	    <div class="row">
+	        <div class="col">
+				
+<form th:action="@{/saveElectiveCourse}" th:object="${newElectiveCourse}" method="post">
+<h3>Post Elective Course</h3>
+Title: <input type="text" th:field="*{title}"/>
+<br/>
+Max allowed students: <input type="number" th:field="*{maxAllowedStudents}"/>
+<br/>
+Year of study: <input type="number" th:field="*{studyYear}"/>
+<br/>
+Category: 
+<select th:field="*{category}"> 
+	<option th:each="courseCategory:${courseCategories}" th:value="${courseCategory.category}" th:text="${courseCategory.description}"></option>
+</select>
+<br/>
+Theacher: <input type="text" th:field="*{teacherName}"/>
+<br/>
+<input type="submit" class="btn btn-success" value="Save"/>
+<br/>
+<input type="reset" class="btn btn-reset" value="Reset"/>
+</form>
+</div>
+</div>
+</div>
+</body>
+</html>

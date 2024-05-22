@@ -1,0 +1,11 @@
+com\ierdely\elective_courses\entities\CourseCategory.class
+com\ierdely\elective_courses\controllers\StudentController.class
+com\ierdely\elective_courses\ElectiveCoursesApplication.class
+com\ierdely\elective_courses\entities\Student.class
+com\ierdely\elective_courses\repositories\ElectiveCourseRepository.class
+com\ierdely\elective_courses\repositories\StudentRepository.class
+com\ierdely\elective_courses\repositories\CourseCategoryRepository.class
+com\ierdely\elective_courses\controllers\IndexController.class
+com\ierdely\elective_courses\controllers\ElectiveCourseController.class
+com\ierdely\elective_courses\entities\ElectiveCourse.class
+com\ierdely\elective_courses\controllers\HelloController.class
