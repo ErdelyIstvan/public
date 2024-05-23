@@ -5,28 +5,27 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 @AllArgsConstructor
-@Getter
-@Setter
 @Entity
-@Table(name="T_STUDENT")
+@Data
 public class Student {
 	
 	
 	@Id
-	@Column(name="NAME")
+	//@Column(name="NAME")
 	private String name;
 	
-	@Column(name="GRADE")
+	//@Column(name="GRADE")
 	private float grade;
 	
-	@Column(name="S_YEAR")
+	//@Column(name="S_YEAR")
 	private byte studyYear;
 	
-	@Column(name="F_SECTION")
+	//@Column(name="F_SECTION")
 	private String facultySection;
 
 }

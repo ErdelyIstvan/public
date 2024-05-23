@@ -1,43 +1,32 @@
 package com.ierdely.elective_courses.entities;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 @Entity
-@Table(name="T_E_COURSE")
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 public class ElectiveCourse {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO )
-	@Column(name="ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY )
 	int id;
 	
-	@Column(name="TITLE")
 	private String title;
 
-	@Column(name="MAX_A")
 	private byte maxAllowedStudents;
 	
-	@Column(name="S_YEAR")
+	//@Column(name="S_YEAR")
 	private byte studyYear;
 	
-	@JoinColumn(name="CAT_ID")
-	@ManyToOne(fetch = FetchType.LAZY)
-	private CourseCategory category;
+	//@JoinColumn(name="CAT_ID")
+	//@ManyToOne(fetch = FetchType.LAZY)
+	private String category;
 	
-	@Column(name="TEACHER")
+	
 	private String teacherName;
 
 	public ElectiveCourse() {
@@ -73,11 +62,11 @@ public class ElectiveCourse {
 		this.studyYear = studyYear;
 	}
 
-	public CourseCategory getCategory() {
+	public String getCategory() {
 		return category;
 	}
 
-	public void setCategory(CourseCategory category) {
+	public void setCategory(String category) {
 		this.category = category;
 	}
 

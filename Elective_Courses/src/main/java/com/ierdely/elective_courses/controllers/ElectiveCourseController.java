@@ -5,6 +5,10 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +19,10 @@ import com.ierdely.elective_courses.entities.CourseCategory;
 import com.ierdely.elective_courses.entities.ElectiveCourse;
 import com.ierdely.elective_courses.repositories.CourseCategoryRepository;
 import com.ierdely.elective_courses.repositories.ElectiveCourseRepository;
+import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesCreate;
+import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesDelete;
+import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesRead;
+import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesUpdate;
 
 import jakarta.websocket.server.PathParam;
 
@@ -25,19 +33,8 @@ public class ElectiveCourseController {
 	private ElectiveCourseRepository coursRepository;	
 	
 	@Autowired
-	private CourseCategoryRepository categoryepository;
-	
-	@RequestMapping("/hello")
-	public String hello() {
-		return "hello";
-	}
+	private CourseCategoryRepository categoryRepository;
 
-	@RequestMapping("/sendData")
-	public ModelAndView sendData() {
-		ModelAndView mav = new ModelAndView("data");
-		mav.addObject("message", "Take up one idea and make it your life");
-		return mav;
-	}
 
 	@RequestMapping("/electivecourses/{courseId}")
 	public ModelAndView getElectiveCourse(@PathVariable Integer courseId) {
@@ -51,56 +48,77 @@ public class ElectiveCourseController {
 
 	}
 	
+	@IsElectiveCoursesRead
 	@RequestMapping("/electivecourses")
-	public ModelAndView getElectiveCourses() {
-		ModelAndView mav = new ModelAndView("electiveCourseList");
+	public ModelAndView index() {
 
 		List<ElectiveCourse> courses = coursRepository.findAll();
-
-		mav.addObject("electiveCourses", courses);
-		return mav;
-
-	}
-	
-	@RequestMapping("/electivecoursesform")
-	public ModelAndView displayElectiveCourseForm() {
-		
-		List<CourseCategory> courseCategories = categoryepository.findAll();
-		
-		ModelAndView mav = new ModelAndView("electiveCourseForm");
-		ElectiveCourse electiveCourse = new ElectiveCourse();
-		mav.addObject("courseCategories", courseCategories);
-		mav.addObject("newElectiveCourse", electiveCourse);
+		ModelAndView mav = new ModelAndView("electivecourses");
+		mav.addObject("electivecourses", courses);
 		return mav;
 	}
 	
-	@RequestMapping("/saveElectiveCourse")
-	public String saveElectiveCourse(@ModelAttribute ElectiveCourse electiveCourse) {
-		
-//		Optional<CourseCategory> category = categoryepository.findById(electiveCourse.getCategory().getCategory());
-//		if (category.isPresent()) {
-//			ModelAndView mav = new ModelAndView("badCategory");
-//			mav.addObject("category", electiveCourse.getCategory().getCategory());
-//			//return mav;
-//		}
-//		try {
-		//electiveCourse.setCategory(null);
-			coursRepository.save(electiveCourse);
-//		} catch (Exception e) {
-//			
-//			ModelAndView mav = new ModelAndView("exception");
-//			mav.addObject("exception", e);
-//			return mav;
-//		}
-		ModelAndView mav = new ModelAndView("result");
-		System.out.println(electiveCourse.getTeacherName());
-		return "redirect:/";
-	}
+	@IsElectiveCoursesCreate
+    @GetMapping("/electivecourses/create")
+    public ModelAndView create() {
 
-    @PostMapping("delete-elective-course")
-    public String deleteElectiveCourse(@PathParam("id") int id) {
+        return new ModelAndView("electivecourses-create", "newElectiveCourse", new ElectiveCourse());
+    }
+	
+	@IsElectiveCoursesCreate
+    @PostMapping("/electivecourses/create")
+    public String create(@ModelAttribute @Validated ElectiveCourse customer, BindingResult bindingResult) {
+		
+        if (bindingResult.hasErrors()) {
+            return "electivecourses-create";
+        } else {
+        	coursRepository.save(customer);
+            return "redirect:/electivecourses";
+        }
+    }
+    
+	
+//	@RequestMapping("/electivecoursesform")
+//	public ModelAndView displayElectiveCourseForm() {
+//		
+//		List<CourseCategory> courseCategories = categoryRepository.findAll();
+//		
+//		ModelAndView mav = new ModelAndView("electiveCourseForm");
+//		ElectiveCourse electiveCourse = new ElectiveCourse();
+//		mav.addObject("courseCategories", courseCategories);
+//		mav.addObject("newElectiveCourse", electiveCourse);
+//		return mav;
+//	}
+//	
+//	@RequestMapping("/saveElectiveCourse")
+//	public String saveElectiveCourse(@ModelAttribute ElectiveCourse electiveCourse) {
+//		
+////		Optional<CourseCategory> category = categoryepository.findById(electiveCourse.getCategory().getCategory());
+////		if (category.isPresent()) {
+////			ModelAndView mav = new ModelAndView("badCategory");
+////			mav.addObject("category", electiveCourse.getCategory().getCategory());
+////			//return mav;
+////		}
+////		try {
+//		//electiveCourse.setCategory(null);
+//			coursRepository.save(electiveCourse);
+////		} catch (Exception e) {
+////			
+////			ModelAndView mav = new ModelAndView("exception");
+////			mav.addObject("exception", e);
+////			return mav;
+////		}
+//		ModelAndView mav = new ModelAndView("result");
+//		System.out.println(electiveCourse.getTeacherName());
+//		return "redirect:/";
+//	}
+
+	@IsElectiveCoursesDelete
+    @GetMapping("electivecourses/delete/id")
+    public String delete(@PathParam("id") int id) {
+		
     	coursRepository.deleteById(id);
 
-        return "redirect:/";
+        return "redirect:/electivecourses";
     }
 }

@@ -1,0 +1,32 @@
+package com.ierdely.elective_courses.security;
+
+public interface SecurityRoles {
+    String ROLE_PREFIX = "ROLE_";
+
+    String ADMIN = "ADMIN";
+    
+    String STUDENT = "STUDENT";
+    
+    
+    String COURSES_ADMIN = "CUSTOMERS_ADMIN";
+    String COURSES_CREATE = "COURSE_CREATE";
+    String COURSES_READ = "COURSE_READ";
+    String COURSES_UPDATE = "COURSE_UPDATE";
+    String COURSES_DELETE = "COURSE_DELETE";
+    String COURSES_PAG_VIEW = "COURSE_PAG_VIEW";
+
+    String STUDENTS_ADMIN = "STUDENTS_ADMIN";
+    String STUDENTS_CREATE = "STUDENTS_CREATE";
+    String STUDENTS_READ = "STUDENTS_READ";
+    String STUDENTS_UPDATE = "STUDENTS_UPDATE";
+    String STUDENTS_DELETE = "STUDENTS_DELETE";
+    String STUDENTS_PAG_VIEW = "STUDENTS_PAG_VIEW";
+    
+    String RESULTS_ADMIN = "RESULTS_ADMIN";
+    String RESULTS_CREATE = "RESULTS_CREATE";
+    String RESULTS_READ = "RESULTS_READ";
+    String RESULTS_UPDATE = "RESULTS_UPDATE";
+    String RESULTS_DELETE = "RESULTS_DELETE";
+    String RESULTS_PAG_VIEW = "RESULTS_PAG_VIEW";
+
+}
