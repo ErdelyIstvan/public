@@ -7,14 +7,17 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 py-4">
-                <h2>Add Elective Course</h2>
+                <h2>Students List</h2>
 
-                <form th:replace="fragments/courseform :: courseform"></form>
+               <div th:replace="fragments/studentsList :: studentsList"></div>
+
+                <a href="#" th:href="@{/students/create}" type="button" class="btn btn-primary">Add Student</a>
             </div>
         </div>
+    </div>
 
-	</div>
 </main>
+
 
 </body>
 </html>

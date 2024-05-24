@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
 
 <body>
-	<!--
+	
     <div class="row">
         <div class="col-md-4" th:if="${electivecourses.isEmpty()}">
             <div class="alert alert-warning" role="alert">
@@ -10,8 +10,8 @@
             </div>
         </div>
 	</div>
-	-->
-	<table>
+	
+	<table th:fragment="electiveCourseList" class="table">
 		<tr>
 			<th>Id</th>
 			<th>Title</th>
@@ -27,7 +27,7 @@
 			<td th:text="${electiveCourse.title}"></td>
 			<td th:text="${electiveCourse.maxAllowedStudents}"></td>
 			<td th:text="${electiveCourse.studyYear}"></td>
-			<td th:text="${electiveCourse.category}"></td>
+			<td th:text="${electiveCourse.category.getCategory()}"></td>
 			<td th:text="${electiveCourse.teacherName}"></td>
 			<td>	
 				<a href="#" th:href="@{'/electivecourses/delete/'+${electiveCourse.id}}" type="button" class="btn btn-outline-danger">Delete</a>

@@ -1,32 +1,42 @@
 package com.ierdely.elective_courses.entities;
+
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import jakarta.validation.constraints.*;
 
 @Entity
+@Table
 @Data
 @AllArgsConstructor
 public class ElectiveCourse {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY )
+	@GeneratedValue(strategy = GenerationType.AUTO )
 	int id;
 	
+	@NotBlank(message = "'Title' can not be blank.")
 	private String title;
 
+	@Min(value = 1, message = "'Max Allowed Students' has to be greater then or equal to 1.")
+	@Max(value = 999, message = "'Max Allowed Students' as to be less then or equal to 999.")
 	private byte maxAllowedStudents;
 	
-	//@Column(name="S_YEAR")
+	@Min(value = 1, message = "'Year of study' has to be greater than or equal to 1.")
+	@Max(value = 5, message = "'Year of study' has to be smaller than or equal to 5.")
 	private byte studyYear;
 	
-	//@JoinColumn(name="CAT_ID")
-	//@ManyToOne(fetch = FetchType.LAZY)
-	private String category;
+	@ManyToOne(fetch = FetchType.EAGER)
+	private CourseCategory category;
 	
-	
+	@NotBlank(message = "'Teacher' can not be blank.")
 	private String teacherName;
 
 	public ElectiveCourse() {
@@ -62,11 +72,11 @@ public class ElectiveCourse {
 		this.studyYear = studyYear;
 	}
 
-	public String getCategory() {
+	public CourseCategory getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(CourseCategory category) {
 		this.category = category;
 	}
 

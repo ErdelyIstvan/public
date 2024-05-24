@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
 
 <body>
-	<!--
+	
     <div class="row">
         <div class="col-md-4" th:if="${electivecourses.isEmpty()}">
             <div class="alert alert-warning" role="alert">
@@ -10,8 +10,8 @@
             </div>
         </div>
 	</div>
-	-->
-	<table>
+	
+	<table th:fragment="electiveCourseList" class="table">
 		<tr>
 			<th>Id</th>
 			<th>Title</th>

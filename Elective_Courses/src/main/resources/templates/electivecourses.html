@@ -3,43 +3,19 @@
 <body>
 
 <main role="main">
-
+  <div class="jumbotron">
     <div class="container">
         <div class="row">
             <div class="col-md-12 py-4">
                 <h2>Elective Courses List</h2>
-				<table>
-					<tr>
-						<th>Id</th>
-						<th>Title</th>
-						<th>Max Allowed Students</th>
-						<th>Year of study</th>
-						<th>Category</th>
-						<th>Teacher</th>
-						<th>Actions</th>
-					</tr>
-					
-					<tr th:each="electiveCourse:${electivecourses}">
-						<td th:text="${electiveCourse.id}"></td>
-						<td th:text="${electiveCourse.title}"></td>
-						<td th:text="${electiveCourse.maxAllowedStudents}"></td>
-						<td th:text="${electiveCourse.studyYear}"></td>
-						<td th:text="${electiveCourse.category}"></td>
-						<td th:text="${electiveCourse.teacherName}"></td>
-						<td>	
-							<a href="#" th:href="@{'/electivecourses/delete/'+${electiveCourse.id}}" type="button" class="btn btn-outline-danger">Delete</a>
-						</td>
-					</tr>
 
-				</table>
-
-<!--                <div th:replace="fragments/electiveCourseList :: electiveCourseList"></div>-->
+                <div th:replace="fragments/electiveCourseList :: electiveCourseList"></div>
 
                 <a href="#" th:href="@{/electivecourses/create}" type="button" class="btn btn-primary">Add Elective Course</a>
             </div>
         </div>
     </div>
-
+  </div>
 </main>
 
 

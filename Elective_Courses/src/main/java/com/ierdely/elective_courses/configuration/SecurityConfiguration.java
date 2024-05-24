@@ -15,8 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
-@Configuration
-@EnableMethodSecurity
+//TODO remove this class
+//@Configuration
+//@EnableMethodSecurity
 public class SecurityConfiguration {
 
 	@Bean

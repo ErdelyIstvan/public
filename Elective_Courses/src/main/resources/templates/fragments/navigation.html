@@ -9,7 +9,7 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="#" th:href="@{/index}">Home</a>
+                <a class="nav-link" href="#" th:href="@{/home}">Home</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#" th:href="@{/students}">Students</a>
@@ -19,11 +19,13 @@
             </li>
 			<!--
             <li class="nav-item">
-                <a class="nav-link" href="#" th:href="@{/customers}">Customers</a>
+                <a class="nav-link" href="#" th:href="@{/results}">Results</a>
             </li>
 			-->
         </ul>
-
+		<div th:if="${loginError}" class="alert alert-danger" role="alert">
+		    Wrong username or password
+		</div>
         <div sec:authorize="!isAuthenticated()">
             <a href="#" th:href="@{/login}">Login</a>
         </div>

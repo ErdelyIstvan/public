@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
+
+<body>
+	
+    <div class="row">
+        <div class="col-md-4" th:if="${students.isEmpty()}">
+            <div class="alert alert-warning" role="alert">
+                No STUDENT defined yet.
+            </div>
+        </div>
+	</div>
+	<table th:fragment="studentsList" class="table">
+	
+		<tr>
+			<th>Name</th>
+			<th>Grade</th>
+			<th>Year of study</th>
+			<th>Section</th>
+			<th>Actions</th>
+		</tr>
+		
+		<tr th:each="students:${students}">
+			<td th:text="${students.name}"></td>
+			<td th:text="${students.grade}"></td>
+			<td th:text="${students.studyYear}"></td>
+			<td th:text="${students.facultySection}"></td>
+			<td>	
+				<a href="#" th:href="@{'/students/delete/'+${students.name}}" type="button" class="btn btn-outline-danger">Delete</a>
+			</td>
+		</tr>
+	
+	</table>
+</body>
+</html>
