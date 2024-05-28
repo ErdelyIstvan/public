@@ -28,7 +28,8 @@
 			<td th:text="${student.studyYear}"></td>
 			<td th:text="${student.facultySection}"></td>
 			<td>	
-				<a href="#" th:href="@{'/students/delete/'+${student.id}}" type="button" class="btn btn-outline-danger">Delete</a>
+				<a sec:authorize="hasRole('ADMIN')" href="#" th:href="@{'/students/edit/'+${student.id}}" type="button" class="btn btn-primary">Edit</a>
+				<a sec:authorize="hasRole('ADMIN')" href="#" th:href="@{'/students/delete/'+${student.id}}" type="button" class="btn btn-outline-danger">Delete</a>
 			</td>
 		</tr>
 	

@@ -2,8 +2,18 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
 
 <body>
-	<form th:fragment="electiveCourseForm" method="post" action="#" th:action="@{/electivecourses/create}" th:object="${electiveCourse}">
+	<form th:fragment="electiveCourseFormUpdate" method="put" action="#" 
+	th:action="@{/electivecourses/update/{id}(id=${electiveCourse.id})}" th:object="${electiveCourse}">
 
+		<div class="row">
+		    <div class="col-md-4 mb-3">
+		        <label for="title">Id</label>
+		        <output type="id" th:text="${electiveCourse.id}" class="form-control" id="id" th:field="*{id}"
+		               th:classappend="${#fields.hasErrors('id')} ? 'is-invalid'">
+		        
+		    </div>
+		</div>
+		
 		<div class="row">
 	        <div class="col-md-4 mb-3">
 	            <label for="title">Title</label>
@@ -51,9 +61,9 @@
 	        <div class="col-md-1">
 	            <a href="#" th:href="@{/electivecourses}" class="btn btn-outline-secondary">Cancel</a>
 	        </div>
-			<div class="col-md-2">
-			    <button class="btn btn-primary btn-block" type="submit">Add</button>
-			</div>
+	        <div class="col-md-2">
+	            <button class="btn btn-primary btn-block" type="submit">Update</button>
+	        </div>
 	    </div>
 	</form>
 

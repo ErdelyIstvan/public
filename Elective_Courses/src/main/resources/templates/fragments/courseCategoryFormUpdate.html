@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
+
+<body>
+	<form th:fragment="courseCategoryFormUpdate" method="put" action="#" 
+	th:action="@{/coursecategories/update/{category}(category=${courseCategory.category})}" th:object="${courseCategory}">
+
+		<div class="row">
+	        <div class="col-md-4 mb-3">
+	            <label for="category">Category</label>
+	            <output type="text" th:text="${courseCategory.category}" class="form-control" id="category" th:field="*{category}">
+	            <div class="invalid-feedback" th:errors="*{category}"></div>
+	        </div>
+	    </div>
+
+	    <div class="row">
+	        <div class="col-md-6 mb-3">
+	            <label for="description">Description</label>
+	            <input type="text" class="form-control" id="description" th:field="*{description}"
+	                   th:classappend="${#fields.hasErrors('description')} ? 'is-invalid'">
+	            <div class="invalid-feedback" th:errors="*{description}"></div>
+	        </div>
+	    </div>
+
+
+		<div class="row">
+	        <div class="col-md-1">
+	            <a href="#" th:href="@{/coursecategories}" class="btn btn-outline-secondary">Cancel</a>
+	        </div>
+	        <div class="col-md-2">
+	            <button class="btn btn-primary btn-block" type="submit">Update</button>
+	        </div>
+	    </div>
+	</form>
+
+	</body>
+	</html>
+

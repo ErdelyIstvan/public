@@ -2,9 +2,9 @@ package com.ierdely.elective_courses.controllers;
 
 import java.util.List;
 
-import org.hibernate.grammars.hql.HqlParser.CastTargetContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,22 +14,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ierdely.elective_courses.entities.CourseCategory;
+import com.ierdely.elective_courses.entities.Student;
 import com.ierdely.elective_courses.repositories.CourseCategoriesRepository;
 import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesCreate;
 import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesDelete;
 import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesRead;
+import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesUpdate;
+import com.ierdely.elective_courses.security.annotations.students.IsStudentsUpdate;
 
 @Controller
 public class CourseCategoriesController {
 	
 	@Autowired
-	private CourseCategoriesRepository categoryRepository;
+	private CourseCategoriesRepository courseCategoriesRepository;
 	
 	@IsElectiveCoursesRead
 	@GetMapping("/coursecategories")
 	public ModelAndView index() {
 
-		List<CourseCategory> courses = categoryRepository.findAll();
+		List<CourseCategory> courses = courseCategoriesRepository.findAll();
 		ModelAndView mav = new ModelAndView("coursecategories");
 		mav.addObject("coursecategories", courses);
 		return mav;
@@ -52,19 +55,48 @@ public class CourseCategoriesController {
   
             return "coursecategory-create";
         } else {
-        	categoryRepository.save(newCourseCategory);
+        	courseCategoriesRepository.save(newCourseCategory);
             return "redirect:/coursecategories";
         }
         
     }
     
-
 	@IsElectiveCoursesDelete
     @GetMapping("coursecategories/delete/{category}")
     public String delete(@PathVariable("category") String category) {
 		
-    	categoryRepository.deleteById(category);
+    	courseCategoriesRepository.deleteById(category);
 
         return "redirect:/coursecategories";
     }
+	
+	@IsElectiveCoursesUpdate
+    @GetMapping("/coursecategories/edit/{category}")
+    public ModelAndView showUpdate(@PathVariable("category") String category) {
+
+		CourseCategory courseCategory = courseCategoriesRepository.findById(category)
+	    	      .orElseThrow(() -> new IllegalArgumentException("Invalid Course Category: " + category));
+		
+		ModelAndView mav = new ModelAndView("coursecategory-update", "courseCategory", courseCategory);
+        return mav;
+    }
+	
+	@IsElectiveCoursesUpdate
+    @GetMapping("/coursecategories/update/{category}")
+    public String update(@PathVariable("category") String categoryId, 
+    		@ModelAttribute @Validated CourseCategory category, 
+    		BindingResult bindingResult, Model model) {
+		
+		category.setCategory(categoryId);
+
+		if (bindingResult.hasErrors()) {
+        
+            return "coursecategory-update";
+        } else {
+        	
+        	courseCategoriesRepository.save(category);
+            return "redirect:/coursecategories";
+        }
+    }
+	
 }

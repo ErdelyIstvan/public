@@ -32,7 +32,7 @@
 	        <div class="col-md-12 mb-3">
 	            <label for="category">Category</label>
 					<select th:field="*{category}" class="form-control" id="category" th:classappend="${#fields.hasErrors('category')} ? 'is-invalid'"> 
-					   	<option th:each="courseCategory:${courseCategories}" th:value="${courseCategory.category}" th:text="${courseCategory.description}"></option>
+					   	<option th:each="category:${categories}" th:value="${category.category}" th:text="${category.category}"></option>
 					</select>   
 	            <div class="invalid-feedback" th:errors="*{category}"></div>
 	        </div>
@@ -51,9 +51,9 @@
 	        <div class="col-md-1">
 	            <a href="#" th:href="@{/electivecourses}" class="btn btn-outline-secondary">Cancel</a>
 	        </div>
-	        <div class="col-md-2">
-	            <button class="btn btn-primary btn-block" type="submit">Add</button>
-	        </div>
+			<div class="col-md-2">
+			    <button class="btn btn-primary btn-block" type="submit">Add</button>
+			</div>
 	    </div>
 	</form>
 

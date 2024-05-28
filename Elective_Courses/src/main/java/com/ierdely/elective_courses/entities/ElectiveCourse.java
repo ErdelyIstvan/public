@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -33,19 +34,19 @@ public class ElectiveCourse {
 	@Max(value = 5, message = "'Year of study' has to be smaller than or equal to 5.")
 	private byte studyYear;
 	
+	@NotNull(message = "'Category' can not be null.")
 	@ManyToOne(fetch = FetchType.EAGER)
 	private CourseCategory category;
 	
 	@NotBlank(message = "'Teacher' can not be blank.")
 	private String teacherName;
-
-	public ElectiveCourse() {
-		
-	}
-	
 	
 	public int getId() {
 		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	public String getTitle() {

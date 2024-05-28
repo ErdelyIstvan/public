@@ -3,17 +3,19 @@
 <body>
 
 <main role="main">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 py-4">
-                <h2>Course Category List</h2>
-
-                <div th:replace="fragments/courseCategoryList :: courseCategoryList"></div>
-
-                <a href="#" th:href="@{/coursecategories/create}" type="button" class="btn btn-primary">Add Course Category</a>
-            </div>
-        </div>
-    </div>
+	<div class="jumbotron">	
+	    <div class="container">
+	        <div class="row">
+	            <div class="col-md-12 py-4">
+	                <h2>Course Category List</h2>
+	
+	                <div th:replace="fragments/courseCategoryList :: courseCategoryList"></div>
+	
+	                <a href="#" th:href="@{/coursecategories/create}" type="button" class="btn btn-primary" sec:authorize="hasRole('ADMIN')">Add Course Category</a>
+	            </div>
+	        </div>
+	    </div>
+	</div>
 </main>
 
 

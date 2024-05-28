@@ -7,9 +7,9 @@
     <div class="container" sec:authorize="hasRole('ADMIN')">
         <div class="row">
             <div class="col-md-12 py-4">
-                <h2>Add Course Category</h2>
+                <h2>Edit Elective Course</h2>
 
-                <form th:replace="fragments/courseCategoryForm :: courseCategoryForm"></form>
+                <form th:replace="fragments/electiveCourseFormUpdate :: electiveCourseFormUpdate"></form>
             </div>
         </div>
 

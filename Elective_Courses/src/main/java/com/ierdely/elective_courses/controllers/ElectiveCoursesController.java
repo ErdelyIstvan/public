@@ -5,12 +5,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.mediatype.hal.CurieProvider;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ierdely.elective_courses.entities.CourseCategory;
@@ -20,6 +22,7 @@ import com.ierdely.elective_courses.repositories.ElectiveCoursesRepository;
 import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesCreate;
 import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesDelete;
 import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesRead;
+import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesUpdate;
 
 @Controller
 public class ElectiveCoursesController {
@@ -49,15 +52,16 @@ public class ElectiveCoursesController {
     public ModelAndView create() {
 		
 		ModelAndView mav = new ModelAndView("electivecourse-create", "electiveCourse", new ElectiveCourse());
-		mav.addObject("courseCategories", categoryRepository.findAll());
+		mav.addObject("categories", categoryRepository.findAll());
         return mav;
     }
 	
 	@IsElectiveCoursesCreate
     @PostMapping("/electivecourses/create")
-    public String create(@ModelAttribute @Validated ElectiveCourse newElectiveCourse, BindingResult bindingResult) {
+    public String create(@ModelAttribute @Validated ElectiveCourse newElectiveCourse, BindingResult bindingResult, Model model) {
 		
         if (bindingResult.hasErrors()) {
+        	model.addAttribute("categories", categoryRepository.findAll());
             return "electivecourse-create";
         } else {
         	courseRepository.save(newElectiveCourse);
@@ -74,5 +78,32 @@ public class ElectiveCoursesController {
     	courseRepository.deleteById(id);
 
         return "redirect:/electivecourses";
+    }
+	
+	@IsElectiveCoursesUpdate
+    @GetMapping("/electivecourses/edit/{id}")
+    public ModelAndView showUpdate(@PathVariable("id") Integer id) {
+	    ElectiveCourse userelectiveCourse = courseRepository.findById(id)
+	    	      .orElseThrow(() -> new IllegalArgumentException("Invalid Elective Course Id:" + id));
+		ModelAndView mav = new ModelAndView("electivecourse-update", "electiveCourse", userelectiveCourse);
+		mav.addObject("categories", categoryRepository.findAll());
+        return mav;
+    }
+	
+	@IsElectiveCoursesCreate
+    @GetMapping("/electivecourses/update/{id}")
+    public String update(@PathVariable("id") Integer id, @ModelAttribute @Validated ElectiveCourse electiveCourse, BindingResult bindingResult, Model model) {
+		
+        if (bindingResult.hasErrors()) {
+        	
+        	electiveCourse.setId(id);
+        	model.addAttribute("categories", categoryRepository.findAll());
+            return "electivecourse-update";
+        } else {
+        	
+        	electiveCourse.setId(id);
+        	courseRepository.save(electiveCourse);
+            return "redirect:/electivecourses";
+        }
     }
 }

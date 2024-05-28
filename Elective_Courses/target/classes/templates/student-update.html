@@ -4,16 +4,16 @@
 
 <main role="main">
 
-    <div class="container" sec:authorize="hasRole('ADMIN')">
+    <div class="container">
         <div class="row">
             <div class="col-md-12 py-4">
-                <h2>Add Course Category</h2>
+                <h2>Edit Student</h2>
 
-                <form th:replace="fragments/courseCategoryForm :: courseCategoryForm"></form>
+                <form th:replace="fragments/studentFormUpdate :: studentFormUpdate"></form>
             </div>
         </div>
+    </div>
 
-	</div>
 </main>
 
 </body>

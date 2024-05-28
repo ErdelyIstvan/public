@@ -31,7 +31,8 @@ xmlns:th="http://www.thymeleaf.org/">
 			<td th:text="${electiveCourse.category.getCategory()}"></td>
 			<td th:text="${electiveCourse.teacherName}"></td>
 			<td>	
-				<a href="#" th:href="@{'/electivecourses/delete/'+${electiveCourse.id}}" type="button" class="btn btn-outline-danger">Delete</a>
+				<a sec:authorize="hasRole('ADMIN')" href="#" th:href="@{'/electivecourses/edit/'+${electiveCourse.id}}" type="button" class="btn btn-primary">Edit</a>
+				<a sec:authorize="hasRole('ADMIN')" href="#" th:href="@{'/electivecourses/delete/'+${electiveCourse.id}}" type="button" class="btn btn-outline-danger">Delete</a>
 			</td>
 		</tr>
 	

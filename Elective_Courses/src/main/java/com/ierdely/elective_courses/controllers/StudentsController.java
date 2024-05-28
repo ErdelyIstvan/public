@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.grammars.hql.HqlParser.CastTargetContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,11 +14,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ierdely.elective_courses.entities.ElectiveCourse;
 import com.ierdely.elective_courses.entities.Student;
 import com.ierdely.elective_courses.repositories.StudentsRepository;
 import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesCreate;
 import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesDelete;
 import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesRead;
+import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesUpdate;
+import com.ierdely.elective_courses.security.annotations.students.IsStudentsUpdate;
 
 @Controller
 public class StudentsController {
@@ -70,5 +74,35 @@ public class StudentsController {
     	studentsRepository.deleteById(id);
 
         return "redirect:/students";
+    }
+	
+
+	@IsStudentsUpdate
+    @GetMapping("/students/edit/{id}")
+    public ModelAndView showUpdate(@PathVariable("id") Integer id) {
+
+		Student student = studentsRepository.findById(id)
+	    	      .orElseThrow(() -> new IllegalArgumentException("Invalid Student Id:" + id));
+		
+		ModelAndView mav = new ModelAndView("student-update", "student", student);
+        return mav;
+    }
+	
+	@IsStudentsUpdate
+    @GetMapping("/students/update/{id}")
+    public String update(@PathVariable("id") Integer id, 
+    		@ModelAttribute @Validated Student student, 
+    		BindingResult bindingResult, Model model) {
+		
+        if (bindingResult.hasErrors()) {
+        
+        	student.setId(id);
+            return "student-update";
+        } else {
+        	
+        	student.setId(id);
+        	studentsRepository.save(student);
+            return "redirect:/students";
+        }
     }
 }

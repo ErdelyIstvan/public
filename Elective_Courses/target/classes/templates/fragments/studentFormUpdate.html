@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<form th:fragment="studentFormUpdate" method="put" action="#" th:action="@{/students/update/{id}(id=${student.id})}"
+      th:object="${student}">
+	  
+    <div class="row">
+		<div class="col-md-4 mb-3">
+		    <label for="id">Id</label>
+		    <output type="text" th:text="${student.id}" class="form-control" id="id" th:field="*{id}"
+		           th:classappend="${#fields.hasErrors('id')} ? 'is-invalid'">
+		    
+		</div>
+        <div class="col-md-4 mb-3">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" th:field="*{name}"
+                   th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'">
+            <div class="invalid-feedback" th:errors="*{name}"></div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="country">Grade</label>
+            <input type="number" class="form-control" id="grade" th:field="*{grade}"
+                   th:classappend="${#fields.hasErrors('grade')} ? 'is-invalid'">
+            <div class="invalid-feedback" th:errors="*{grade}"></div>
+        </div>
+		<div class="col-md-4 mb-3">
+		    <label for="country">Year of Study</label>
+		    <input type="number" class="form-control" id="studyYear" th:field="*{studyYear}"
+		           th:classappend="${#fields.hasErrors('studyYear')} ? 'is-invalid'">
+		    <div class="invalid-feedback" th:errors="*{studyYear}"></div>
+		</div>
+		<div class="col-md-4 mb-3">
+		    <label for="name">Faculty Section</label>
+		    <input type="text" class="form-control" id="facultySection" th:field="*{facultySection}"
+		           th:classappend="${#fields.hasErrors('facultySection')} ? 'is-invalid'">
+		    <div class="invalid-feedback" th:errors="*{facultySection}"></div>
+		</div>
+	</div>
+
+    <div class="row">
+        <div class="col-md-1">
+            <a href="#" th:href="@{/students}" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary btn-block" type="submit">Update</button>
+        </div>
+    </div>
+</form>
+
+</body>
+</html>

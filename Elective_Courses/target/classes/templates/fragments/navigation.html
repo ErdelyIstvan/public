@@ -19,19 +19,18 @@
             </li>
 			<li class="nav-item">
 			    <a class="nav-link" href="#" th:href="@{/coursecategories}">Course Categories</a>
-			</li>			<!--
-            <li class="nav-item">
-                <a class="nav-link" href="#" th:href="@{/results}">Results</a>
-            </li>
-			-->
+			</li>			
+			
         </ul>
 		<div th:if="${loginError}" class="alert alert-danger" role="alert">
-		    Wrong username or password
+		    Wrong username or password!
 		</div>
         <div sec:authorize="!isAuthenticated()">
             <a href="#" th:href="@{/login}">Login</a>
         </div>
-
+		<div sec:authorize="isAuthenticated()" class="white">
+		Username: <a sec:authentication="name"></a> | User roles: <a sec:authentication="principal.authorities"></a>
+		</div>
         <div sec:authorize="isAuthenticated()">
             
             <a href="javascript: document.logoutForm.submit()">Logout</a>
