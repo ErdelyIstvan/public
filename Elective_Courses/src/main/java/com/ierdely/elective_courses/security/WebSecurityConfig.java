@@ -1,23 +1,21 @@
 package com.ierdely.elective_courses.security;
 
-import static com.ierdely.elective_courses.security.SecurityRoles.*;
+import static com.ierdely.elective_courses.security.SecurityRoles.ADMIN;
+import static com.ierdely.elective_courses.security.SecurityRoles.COURSES_PAG_VIEW;
+import static com.ierdely.elective_courses.security.SecurityRoles.RESULTS_PAG_VIEW;
+import static com.ierdely.elective_courses.security.SecurityRoles.STUDENT;
+import static com.ierdely.elective_courses.security.SecurityRoles.STUDENTS_PAG_VIEW;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.SecurityExpressionHandler;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.SecurityFilterChain;
@@ -39,9 +37,10 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     	
         http.authorizeHttpRequests(authz -> authz
-        		
+        		.requestMatchers("/static/favicon.ico").permitAll()
         		.requestMatchers("/", "/home").permitAll()
         		.requestMatchers("/electivecourses/**").hasRole(COURSES_PAG_VIEW)
+        		.requestMatchers("/coursecategories/**").hasRole(COURSES_PAG_VIEW)
         		.requestMatchers("/students/**").hasRole(STUDENTS_PAG_VIEW)
         		.requestMatchers("/results/**").hasRole(RESULTS_PAG_VIEW)
         		.anyRequest().authenticated()
@@ -62,12 +61,12 @@ public class WebSecurityConfig {
     public UserDetailsService userDetailsService(BCryptPasswordEncoder bCryptPasswordEncoder) {
         
     	InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withUsername("student")
-                .password(bCryptPasswordEncoder.encode("stud"))
+        manager.createUser(User.withUsername("s")
+                .password(bCryptPasswordEncoder.encode("s"))
                 .roles(STUDENT)
                 .build());
-        manager.createUser(User.withUsername("admin")
-                .password(bCryptPasswordEncoder.encode("adminPass"))
+        manager.createUser(User.withUsername("a")
+                .password(bCryptPasswordEncoder.encode("a"))
                 .roles(STUDENT, ADMIN)
                 .build());
         return manager;

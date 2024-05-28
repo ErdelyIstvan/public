@@ -3,7 +3,8 @@
 <body>
 
 <form th:fragment="studentForm" method="post" action="#" th:action="@{/students/create}"
-      th:object="${newStudent}">
+      th:object="${student}">
+	  
     <div class="row">
         <div class="col-md-4 mb-3">
             <label for="name">Name</label>

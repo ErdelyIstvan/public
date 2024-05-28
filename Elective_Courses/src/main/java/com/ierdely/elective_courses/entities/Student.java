@@ -2,6 +2,8 @@ package com.ierdely.elective_courses.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
@@ -20,7 +22,10 @@ public class Student {
 	
 	
 	@Id
-	@NotBlank
+	@GeneratedValue(strategy = GenerationType.AUTO )
+	int id;
+	
+	@NotBlank(message="Name can not be blank.")
     @Pattern(regexp = "[A-Za-z ]*", message = "Name contains illegal characters")
 	private String name;
 	
@@ -63,8 +68,16 @@ public class Student {
 		return name;
 	}
 	
-	public String setName(String name) {
-		return this.name = name;
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	

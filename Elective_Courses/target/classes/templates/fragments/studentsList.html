@@ -13,6 +13,7 @@
 	<table th:fragment="studentsList" class="table">
 	
 		<tr>
+			<th>Id</th>
 			<th>Name</th>
 			<th>Grade</th>
 			<th>Year of study</th>
@@ -20,13 +21,14 @@
 			<th>Actions</th>
 		</tr>
 		
-		<tr th:each="students:${students}">
-			<td th:text="${students.name}"></td>
-			<td th:text="${students.grade}"></td>
-			<td th:text="${students.studyYear}"></td>
-			<td th:text="${students.facultySection}"></td>
+		<tr th:each="student:${students}">
+			<td th:text="${student.id}"></td>
+			<td th:text="${student.name}"></td>
+			<td th:text="${student.grade}"></td>
+			<td th:text="${student.studyYear}"></td>
+			<td th:text="${student.facultySection}"></td>
 			<td>	
-				<a href="#" th:href="@{'/students/delete/'+${students.name}}" type="button" class="btn btn-outline-danger">Delete</a>
+				<a href="#" th:href="@{'/students/delete/'+${student.id}}" type="button" class="btn btn-outline-danger">Delete</a>
 			</td>
 		</tr>
 	

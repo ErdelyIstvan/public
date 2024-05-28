@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
+
+<body>
+	
+    <div class="row">
+        <div class="col-md-4" th:if="${coursecategories.isEmpty()}">
+            <div class="alert alert-warning" role="alert">
+                No course category defined yet.
+            </div>
+        </div>
+	</div>
+	
+	<table th:fragment="courseCategoryList" class="table">
+		<tr>
+			<th>Category</th>
+			<th>Description</th>
+			<th>Actions</th>
+		</tr>
+		
+		<tr th:each="category:${coursecategories}">
+			<td th:text="${category.category}"></td>
+			<td th:text="${category.description}"></td>
+			<td>	
+				<a href="#" th:href="@{'/coursecategories/delete/'+${category.category}}" type="button" class="btn btn-outline-danger">Delete</a>
+			</td>
+		</tr>
+	
+	</table>
+</body>
+</html>

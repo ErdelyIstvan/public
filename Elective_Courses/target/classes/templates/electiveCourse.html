@@ -1,25 +1,20 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org/">
-<head>
-<meta charset="UTF-8">
-<title>Elective Course Data</title>
-</head>
+<!doctype html>
+<html th:replace="~{layouts/main :: layout(~{::main})}" xmlns:th="http://www.thymeleaf.org">
 <body>
-	<h1>Course  Details:</h1>
-	Title:
-	<b th:text="${electiveCourse.title}"></b>
-	<br /> 
-	Max number of attandies:
-	<b th:text="${electiveCourse.maxAllowedStudents}"></b>
-	<br />
-	Year of study:
-	<b th:text="${electiveCourse.studyYear}"></b>
-	<br />
-	Cathegory:
-	<b th:text="${electiveCourse.categoryId}"></b>
-	<br />
-	Teacher:
-	<b th:text="${electiveCourse.teacherName}"></b>
-	<br />
+
+<main role="main">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 py-4">
+                <h2>Edit Elective Course</h2>
+
+                <form th:replace="fragments/courseform-edit :: courseform-edit"></form>
+            </div>
+        </div>
+
+	</div>
+</main>
+
 </body>
 </html>

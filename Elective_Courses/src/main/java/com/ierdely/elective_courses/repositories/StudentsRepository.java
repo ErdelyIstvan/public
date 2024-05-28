@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.ierdely.elective_courses.entities.Student;
 
 @Repository
-public interface StudentRepository extends JpaRepository<Student, String> {
+public interface StudentsRepository extends JpaRepository<Student, Integer> {
 
 }
