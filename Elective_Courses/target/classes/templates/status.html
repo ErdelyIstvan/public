@@ -1,0 +1,55 @@
+<!doctype html>
+<html th:replace="~{layouts/main :: layout(~{::main})}" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<main role="main">
+	<div class="jumbotron">
+	    <div class="container">
+	        <div class="row">
+	            <div class="col-md-12 py-4">
+	                <h2 >Enrollment Status Details
+					</h2>
+					<form method="put" action="#" th:action="@{/status/update/{key}(key=enrollment_status)}" th:object="${enrollment_status}">
+
+						<div class="row">
+					        <div class="col-md-4 mb-3">
+					            <label for="status">Enrollment Status</label>
+							   <select th:field="*{value}" id="enrollment_status" > 
+							      	<option th:each="status:${statusOptions}" th:value="${status}" th:text="${status}"></option>
+							   </select>
+					        </div>
+					    </div>
+						<div class="row">
+					        <div class="col-md-2">
+					            <button sec:authorize="hasRole('ADMIN')" class="btn btn-primary btn-block" type="submit">Update</button>
+					        </div>
+					    </div>
+					</form>
+					
+					<form method="put" action="#" th:action="@{/status/update/{key}(key=enrollment_end_date)}" th:object="${enrollment_end_date}">
+
+						<div class="row">
+					        <div class="col-md-4 mb-3">
+					            <label for="status">Enrollment End Date</label>
+								<input type="date" class="form-control" id="value" th:field="*{value}"
+								       th:classappend="${#fields.hasErrors('value')} ? 'is-invalid'">
+							   </input>
+					            <div class="invalid-feedback" th:errors="*{value}"></div>
+					        </div>
+					    </div>
+						<div class="row">
+					        <div class="col-md-2">
+					            <button sec:authorize="hasRole('ADMIN')" class="btn btn-primary btn-block" type="submit">Update</button>
+					        </div>
+					    </div>
+					</form>	
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+</main>
+
+
+</body>
+</html>

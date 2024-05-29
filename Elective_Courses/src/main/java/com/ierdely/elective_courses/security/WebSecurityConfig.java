@@ -1,10 +1,6 @@
 package com.ierdely.elective_courses.security;
 
-import static com.ierdely.elective_courses.security.SecurityRoles.ADMIN;
-import static com.ierdely.elective_courses.security.SecurityRoles.COURSES_PAG_VIEW;
-import static com.ierdely.elective_courses.security.SecurityRoles.RESULTS_PAG_VIEW;
-import static com.ierdely.elective_courses.security.SecurityRoles.STUDENT;
-import static com.ierdely.elective_courses.security.SecurityRoles.STUDENTS_PAG_VIEW;
+import static com.ierdely.elective_courses.security.SecurityRoles.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -42,7 +38,7 @@ public class WebSecurityConfig {
         		.requestMatchers("/electivecourses/**").hasRole(COURSES_PAG_VIEW)
         		.requestMatchers("/coursecategories/**").hasRole(COURSES_PAG_VIEW)
         		.requestMatchers("/students/**").hasRole(STUDENTS_PAG_VIEW)
-        		.requestMatchers("/results/**").hasRole(RESULTS_PAG_VIEW)
+        		.requestMatchers("/enrollments/**").hasRole(ENROLLMENTS_PAG_VIEW)
         		.anyRequest().authenticated()
         	).formLogin( formLogin -> formLogin
             	.loginPage("/login")
@@ -67,8 +63,9 @@ public class WebSecurityConfig {
                 .build());
         manager.createUser(User.withUsername("a")
                 .password(bCryptPasswordEncoder.encode("a"))
-                .roles(STUDENT, ADMIN)
+                .roles(ADMIN)
                 .build());
+        
         return manager;
     }
     

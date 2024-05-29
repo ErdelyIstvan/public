@@ -31,17 +31,23 @@ public class RoleHierarchyConfiguration {
                         .append(STUDENTS_ADMIN, STUDENTS_DELETE)
                         .append(STUDENTS_ADMIN, STUDENTS_PAG_VIEW)
                         
-                        .append(ADMIN, RESULTS_ADMIN)
-                        .append(RESULTS_ADMIN, RESULTS_CREATE)
-                        .append(RESULTS_ADMIN, RESULTS_READ)
-                        .append(RESULTS_ADMIN, RESULTS_UPDATE)
-                        .append(RESULTS_ADMIN, RESULTS_DELETE)
-                        .append(RESULTS_ADMIN, RESULTS_PAG_VIEW)
+                        .append(ADMIN, ENROLLMENTS_ADMIN)
+                        .append(ENROLLMENTS_ADMIN, ENROLLMENTS_CREATE)
+                        .append(ENROLLMENTS_ADMIN, ENROLLMENTS_READ)
+                        .append(ENROLLMENTS_ADMIN, ENROLLMENTS_UPDATE)
+                        .append(ENROLLMENTS_ADMIN, ENROLLMENTS_DELETE)
+                        .append(ENROLLMENTS_ADMIN, ENROLLMENTS_PAG_VIEW)
 
                         .append(STUDENT, STUDENTS_READ)
                         .append(STUDENT, COURSES_READ)
                         .append(STUDENT, COURSES_PAG_VIEW)
                         .append(STUDENT, STUDENTS_PAG_VIEW)
+                        .append(STUDENT, ENROLLMENTS_PAG_VIEW)
+                        .append(STUDENT, ENROLLMENTS_CREATE)
+                        .append(STUDENT, ENROLLMENTS_READ)
+                        .append(STUDENT, ENROLLMENTS_UPDATE)
+                        .append(STUDENT, ENROLLMENTS_DELETE)
+                        
                         
 
                         .build()

@@ -2,7 +2,6 @@ package com.ierdely.elective_courses.controllers;
 
 import java.util.List;
 
-import org.hibernate.grammars.hql.HqlParser.CastTargetContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,13 +13,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ierdely.elective_courses.entities.ElectiveCourse;
 import com.ierdely.elective_courses.entities.Student;
 import com.ierdely.elective_courses.repositories.StudentsRepository;
 import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesCreate;
 import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesDelete;
 import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesRead;
-import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesUpdate;
 import com.ierdely.elective_courses.security.annotations.students.IsStudentsUpdate;
 
 @Controller
@@ -33,9 +30,9 @@ public class StudentsController {
 	@GetMapping("/students")
 	public ModelAndView index() {
 
-		List<Student> courses = studentsRepository.findAll();
+		List<Student> students = studentsRepository.findAll();
 		ModelAndView mav = new ModelAndView("students");
-		mav.addObject("students", courses);
+		mav.addObject("students", students);
 		return mav;
 	}
 	
