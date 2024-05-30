@@ -14,7 +14,8 @@
 	
 		<tr>
 			<th>Id</th>
-			<th>Name</th>
+			<th>First Name</th>
+			<th>Surname</th>
 			<th>Grade</th>
 			<th>Year of study</th>
 			<th>Section</th>
@@ -23,7 +24,8 @@
 		
 		<tr th:each="student:${students}">
 			<td th:text="${student.id}"></td>
-			<td th:text="${student.name}"></td>
+			<td th:text="${student.firstName}"></td>
+			<td th:text="${student.surname}"></td>
 			<td th:text="${student.grade}"></td>
 			<td th:text="${student.studyYear}"></td>
 			<td th:text="${student.facultySection}"></td>

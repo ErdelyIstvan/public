@@ -14,13 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ierdely.elective_courses.entities.CourseCategory;
-import com.ierdely.elective_courses.entities.Student;
 import com.ierdely.elective_courses.repositories.CourseCategoriesRepository;
 import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesCreate;
 import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesDelete;
 import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesRead;
 import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesUpdate;
-import com.ierdely.elective_courses.security.annotations.students.IsStudentsUpdate;
 
 @Controller
 public class CourseCategoriesController {

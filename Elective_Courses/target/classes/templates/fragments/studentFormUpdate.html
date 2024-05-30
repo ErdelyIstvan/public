@@ -12,12 +12,18 @@
 		           th:classappend="${#fields.hasErrors('id')} ? 'is-invalid'">
 		    
 		</div>
-        <div class="col-md-4 mb-3">
-            <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" th:field="*{name}"
-                   th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'">
-            <div class="invalid-feedback" th:errors="*{name}"></div>
-        </div>
+		<div class="col-md-4 mb-3">
+		    <label for="firstName">First Name</label>
+		    <input type="text" class="form-control" id="firstName" th:field="*{firstName}"
+		           th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid'">
+		    <div class="invalid-feedback" th:errors="*{firstName}"></div>
+		</div>
+		<div class="col-md-4 mb-3">
+		    <label for="surname">Surname</label>
+		    <input type="text" class="form-control" id="surname" th:field="*{surname}"
+		           th:classappend="${#fields.hasErrors('surname')} ? 'is-invalid'">
+		    <div class="invalid-feedback" th:errors="*{surname}"></div>
+		</div>
         <div class="col-md-4 mb-3">
             <label for="country">Grade</label>
             <input type="number" class="form-control" id="grade" th:field="*{grade}"

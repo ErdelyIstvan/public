@@ -1,7 +1,5 @@
 package com.ierdely.elective_courses.entities;
 
-import org.springframework.data.annotation.Id;
-
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -21,6 +19,7 @@ public class ApplicationProperty {
 	String value;
 	
 	public ApplicationProperty() {
+		
 	}
 	
 	public ApplicationProperty(String key, String value) {

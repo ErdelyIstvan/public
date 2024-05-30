@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<form th:fragment="teacherForm" method="post" action="#" th:action="@{/teachers/create}"
+      th:object="${teacher}">
+	  
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label for="firstName">First Name</label>
+            <input type="text" class="form-control" id="firstName" th:field="*{firstName}"
+                   th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid'">
+            <div class="invalid-feedback" th:errors="*{firstName}"></div>
+        </div>
+		<div class="col-md-4 mb-3">
+		    <label for="surname">surname</label>
+		    <input type="text" class="form-control" id="surname" th:field="*{surname}"
+		           th:classappend="${#fields.hasErrors('surname')} ? 'is-invalid'">
+		    <div class="invalid-feedback" th:errors="*{surname}"></div>
+		</div>
+		<div class="col-md-4 mb-3">
+		    <label for="email">EMail</label>
+		    <input type="text" class="form-control" id="email" th:field="*{email}"
+		           th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'">
+		    <div class="invalid-feedback" th:errors="*{email}"></div>
+		</div>
+	</div>
+
+    <div class="row">
+		<div class="col-md-1">
+		    <a href="#" th:href="@{/teachers}" class="btn btn-outline-secondary">Cancel</a>
+		</div>
+        <div class="col-md-2">
+            <button class="btn btn-primary btn-block" type="submit">Add</button>
+        </div>
+    </div>
+</form>
+
+</body>
+</html>

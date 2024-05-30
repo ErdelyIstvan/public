@@ -29,7 +29,7 @@ xmlns:th="http://www.thymeleaf.org/">
 			<td th:text="${electiveCourse.maxAllowedStudents}"></td>
 			<td th:text="${electiveCourse.studyYear}"></td>
 			<td th:text="${electiveCourse.category.getCategory()}"></td>
-			<td th:text="${electiveCourse.teacherName}"></td>
+			<td th:text="${electiveCourse.teacher.firstName} + ' ' + ${electiveCourse.teacher.surname}"></td>
 			<td>	
 				<a sec:authorize="hasRole('ADMIN')" href="#" th:href="@{'/electivecourses/edit/'+${electiveCourse.id}}" type="button" class="btn btn-primary">Edit</a>
 				<a sec:authorize="hasRole('ADMIN')" href="#" th:href="@{'/electivecourses/delete/'+${electiveCourse.id}}" type="button" class="btn btn-outline-danger">Delete</a>

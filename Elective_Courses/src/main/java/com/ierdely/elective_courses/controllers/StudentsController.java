@@ -15,9 +15,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ierdely.elective_courses.entities.Student;
 import com.ierdely.elective_courses.repositories.StudentsRepository;
-import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesCreate;
-import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesDelete;
-import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesRead;
+import com.ierdely.elective_courses.security.annotations.students.IsStudentsCreate;
+import com.ierdely.elective_courses.security.annotations.students.IsStudentsDelete;
+import com.ierdely.elective_courses.security.annotations.students.IsStudentsRead;
 import com.ierdely.elective_courses.security.annotations.students.IsStudentsUpdate;
 
 @Controller
@@ -26,7 +26,7 @@ public class StudentsController {
 	@Autowired
 	private StudentsRepository studentsRepository;
 	
-	@IsElectiveCoursesRead
+	@IsStudentsRead
 	@GetMapping("/students")
 	public ModelAndView index() {
 
@@ -36,7 +36,7 @@ public class StudentsController {
 		return mav;
 	}
 	
-	@IsElectiveCoursesCreate
+	@IsStudentsCreate
     @GetMapping("/students/create")
     public ModelAndView create() {
 		
@@ -45,7 +45,7 @@ public class StudentsController {
         return mav;
     }
 	
-	@IsElectiveCoursesCreate
+	@IsStudentsCreate
     @PostMapping("/students/create")
     public String create(@ModelAttribute @Validated Student newStudent, BindingResult bindingResult) {
 		
@@ -64,7 +64,7 @@ public class StudentsController {
     }
     
 
-	@IsElectiveCoursesDelete
+	@IsStudentsDelete
     @GetMapping("students/delete/{id}")
     public String delete(@PathVariable("id") Integer id) {
 		

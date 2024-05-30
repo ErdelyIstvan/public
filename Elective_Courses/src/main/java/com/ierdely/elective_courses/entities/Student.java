@@ -1,19 +1,18 @@
 package com.ierdely.elective_courses.entities;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @AllArgsConstructor
 @Entity
@@ -23,11 +22,15 @@ public class Student {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO )
-	int id;
+	private Integer id;
 	
-	@NotBlank(message="Name can not be blank.")
-    @Pattern(regexp = "[A-Za-z ]*", message = "Name contains illegal characters")
-	private String name;
+	@NotBlank(message="First name can not be blank.")
+    @Pattern(regexp = "[A-Za-z ]*", message = "First name contains illegal characters")
+	private String firstName;
+	
+	@NotBlank(message="Surname can not be blank.")
+    @Pattern(regexp = "[A-Za-z ]*", message = "Surname contains illegal characters")
+	private String surname;
 	
 	@Min(value = 1, message = "Grade has to greater or equal than 1.")
 	@Max(value = 10, message = "Grade has to be smaller or equal than 10.")
@@ -39,47 +42,65 @@ public class Student {
 	
 	@Pattern(regexp = "[A-Za-z ]*", message = "Faculty Section contains illegal characters")
 	private String facultySection;
-
-	public float getGrade() {
-		return grade;
-	}
-
-	public void setGrade(float grade) {
-		this.grade = grade;
-	}
-
-	public byte getStudyYear() {
-		return studyYear;
-	}
-
-	public void setStudyYear(byte studyYear) {
-		this.studyYear = studyYear;
-	}
-
-	public String getFacultySection() {
-		return facultySection;
-	}
-
-	public void setFacultySection(String facultySection) {
-		this.facultySection = facultySection;
-	}
-
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
 	
 	public int getId() {
+		
 		return id;
 	}
 	
 	public void setId(int id) {
+		
 		this.id = id;
 	}
+
+	public String getFirstName() {
+
+		return firstName;
+	}
 	
+	public void setFirstName(String firstName) {
+		
+		this.firstName = firstName;
+	}
 	
+	public String getSurname() {
+	
+		return surname;
+	}
+	
+	public void setSurname(String surname) {
+	
+		this.surname = surname;
+	}
+
+	public float getGrade() {
+		
+		return grade;
+	}
+
+	public void setGrade(float grade) {
+		
+		this.grade = grade;
+	}
+
+	public byte getStudyYear() {
+		
+		return studyYear;
+	}
+
+	public void setStudyYear(byte studyYear) {
+		
+		this.studyYear = studyYear;
+	}
+
+	public String getFacultySection() {
+		
+		return facultySection;
+	}
+
+	public void setFacultySection(String facultySection) {
+		
+		this.facultySection = facultySection;
+	}
 
 }

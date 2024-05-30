@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
+
+<body>
+	
+    <div class="row">
+        <div class="col-md-4" th:if="${teachers.isEmpty()}">
+            <div class="alert alert-warning" role="alert">
+                No TEACHER defined yet.
+            </div>
+        </div>
+	</div>
+	<table th:fragment="teachersList" class="table">
+	
+		<tr>
+			<th>Id</th>
+			<th>First Name</th>
+			<th>Surname</th>
+			<th>Actions</th>
+		</tr>
+		
+		<tr th:each="teacher:${teachers}">
+			<td th:text="${teacher.id}"></td>
+			<td th:text="${teacher.firstName}"></td>
+			<td th:text="${teacher.surname}"></td>
+			<td th:text="${teacher.email}"></td>
+			<td>	
+				<a sec:authorize="hasRole('ADMIN')" href="#" th:href="@{'/teachers/edit/'+${teacher.id}}" type="button" class="btn btn-primary">Edit</a>
+				<a sec:authorize="hasRole('ADMIN')" href="#" th:href="@{'/teachers/delete/'+${teacher.id}}" type="button" class="btn btn-outline-danger">Delete</a>
+			</td>
+		</tr>
+	
+	</table>
+</body>
+</html>

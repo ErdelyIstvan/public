@@ -15,7 +15,7 @@
 
 	    <div class="row">
 	        <div class="col-md-6 mb-3">
-	            <label for="firstName">Max allowed students</label>
+	            <label for="maxAllowedStudents">Max allowed students</label>
 	            <input type="number" class="form-control" id="maxAllowedStudents" th:field="*{maxAllowedStudents}"
 	                   th:classappend="${#fields.hasErrors('maxAllowedStudents')} ? 'is-invalid'">
 	            <div class="invalid-feedback" th:errors="*{maxAllowedStudents}"></div>
@@ -40,16 +40,17 @@
 
 		<div class="row">
 		    <div class="col-md-4 mb-3">
-		        <label for="teacherName">Teacher</label>
-		        <input type="text" class="form-control" id="teacherName" th:field="*{teacherName}"
-		               th:classappend="${#fields.hasErrors('teacherName')} ? 'is-invalid'">
-		        <div class="invalid-feedback" th:errors="*{teacherName}"></div>
+		        <label for="teacher">Teacher</label>
+				<select th:field="*{teacher}" class="form-control" id="teacher" th:classappend="${#fields.hasErrors('teacher')} ? 'is-invalid'"> 
+				   	<option th:each="teacher:${teachers}" th:value="${teacher.id}" th:text="${teacher.firstName}+ ' ' + ${teacher.surname}"></option>
+				</select>   
+		        <div class="invalid-feedback" th:errors="*{teacher}"></div>
 		    </div>
 		</div>
 
 		<div class="row">
 	        <div class="col-md-1">
-	            <a href="#" th:href="@{/electivecourses}" class="btn btn-outline-secondary">Cancel</a>
+	            <a href="#" th:href="@{/teachers}" class="btn btn-outline-secondary">Cancel</a>
 	        </div>
 			<div class="col-md-2">
 			    <button class="btn btn-primary btn-block" type="submit">Add</button>

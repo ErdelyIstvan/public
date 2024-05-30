@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.ierdely.elective_courses.entities.ApplicationProperty;
+import com.ierdely.elective_courses.enums.ApplicationEnrollmentStatus;
 import com.ierdely.elective_courses.repositories.ApplicationPropertiesRepository;
 
 @Service
@@ -20,12 +21,6 @@ public class ApplicationPropertiesService {
 	@Autowired
 	public ApplicationPropertiesService(ApplicationPropertiesRepository applicationPropertiesRepository) {
 		this.applicationPropertiesRepository = applicationPropertiesRepository;
-	}
-	
-	public enum EnrollmentStatus {
-		OPEN,
-		CLOSED,
-		UNKNOWN
 	}
 	
 	@Value("ec.min_mandatory_electives.1")
@@ -110,17 +105,17 @@ public class ApplicationPropertiesService {
 		applicationPropertiesRepository.save(newProp);
 	}
 	
-	public EnrollmentStatus getEnrollmentStatus() {
+	public ApplicationEnrollmentStatus getEnrollmentStatus() {
 		
 		Optional<ApplicationProperty> optionalProp = applicationPropertiesRepository.findById(ApplicationProperty.KEY_ENROLLMENT_STATUS);
 		if (optionalProp.isPresent()) {
-			return EnrollmentStatus.valueOf(optionalProp.get().getValue());			
+			return ApplicationEnrollmentStatus.valueOf(optionalProp.get().getValue());			
 		}
 		
-		return EnrollmentStatus.UNKNOWN;
+		return ApplicationEnrollmentStatus.UNKNOWN;
 	}
 	
-	public void setEnrollmentStatus(EnrollmentStatus newStatus) {
+	public void setEnrollmentStatus(ApplicationEnrollmentStatus newStatus) {
 		ApplicationProperty newProp = new ApplicationProperty(ApplicationProperty.KEY_ENROLLMENT_STATUS, newStatus.toString());
 		applicationPropertiesRepository.save(newProp);
 	}
