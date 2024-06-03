@@ -1,6 +1,7 @@
 package com.ierdely.elective_courses.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,23 +15,29 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ierdely.elective_courses.entities.Student;
+import com.ierdely.elective_courses.entities.User;
 import com.ierdely.elective_courses.repositories.StudentsRepository;
+import com.ierdely.elective_courses.repositories.UsersRepository;
 import com.ierdely.elective_courses.security.annotations.students.IsStudentsCreate;
 import com.ierdely.elective_courses.security.annotations.students.IsStudentsDelete;
 import com.ierdely.elective_courses.security.annotations.students.IsStudentsRead;
 import com.ierdely.elective_courses.security.annotations.students.IsStudentsUpdate;
+import com.ierdely.elective_courses.services.StudentsService;
 
 @Controller
 public class StudentsController {
 	
 	@Autowired
-	private StudentsRepository studentsRepository;
+	private StudentsService studentsService;
+	
+	@Autowired
+	private UsersRepository usersRepository;
 	
 	@IsStudentsRead
 	@GetMapping("/students")
 	public ModelAndView index() {
 
-		List<Student> students = studentsRepository.findAll();
+		List<Student> students = studentsService.getAllStudents();
 		ModelAndView mav = new ModelAndView("students");
 		mav.addObject("students", students);
 		return mav;
@@ -41,23 +48,24 @@ public class StudentsController {
     public ModelAndView create() {
 		
 		ModelAndView mav = new ModelAndView("student-create", "student", new Student());
+		List<User> users = usersRepository.findAll();
+		mav.addObject("users", users);
+
 		              
         return mav;
     }
 	
 	@IsStudentsCreate
     @PostMapping("/students/create")
-    public String create(@ModelAttribute @Validated Student newStudent, BindingResult bindingResult) {
+    public String create(@ModelAttribute @Validated Student newStudent, BindingResult bindingResult, Model model) {
 		
         if (bindingResult.hasErrors()) {
+    		List<User> users = usersRepository.findAll();
+    		model.addAttribute("users", users);
   
             return "student-create";
         } else {
-        	studentsRepository.save(newStudent);
-    		List<Student> students = studentsRepository.findAll();
-    		ModelAndView mav = new ModelAndView("students");
-    		mav.addObject("students", students);
-    		//return mav;
+        	studentsService.save(newStudent);
             return "redirect:/students";
         }
         
@@ -68,7 +76,10 @@ public class StudentsController {
     @GetMapping("students/delete/{id}")
     public String delete(@PathVariable("id") Integer id) {
 		
-    	studentsRepository.deleteById(id);
+		Optional<Student> student = studentsService.getStudent(id);
+		if (student.isPresent()) {
+			studentsService.delete(student.get());			
+		}
 
         return "redirect:/students";
     }
@@ -78,10 +89,13 @@ public class StudentsController {
     @GetMapping("/students/edit/{id}")
     public ModelAndView showUpdate(@PathVariable("id") Integer id) {
 
-		Student student = studentsRepository.findById(id)
+		Student student = studentsService.getStudent(id)
 	    	      .orElseThrow(() -> new IllegalArgumentException("Invalid Student Id:" + id));
 		
 		ModelAndView mav = new ModelAndView("student-update", "student", student);
+		List<User> users = usersRepository.findAll();
+		mav.addObject("users", users);
+
         return mav;
     }
 	
@@ -98,7 +112,7 @@ public class StudentsController {
         } else {
         	
         	student.setId(id);
-        	studentsRepository.save(student);
+        	studentsService.save(student);
             return "redirect:/students";
         }
     }

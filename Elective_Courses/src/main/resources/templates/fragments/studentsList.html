@@ -19,6 +19,7 @@
 			<th>Grade</th>
 			<th>Year of study</th>
 			<th>Section</th>
+			<th>User</th>
 			<th>Actions</th>
 		</tr>
 		
@@ -29,6 +30,7 @@
 			<td th:text="${student.grade}"></td>
 			<td th:text="${student.studyYear}"></td>
 			<td th:text="${student.facultySection}"></td>
+			<td th:text="${student.user}"></td>
 			<td>	
 				<a sec:authorize="hasRole('ADMIN')" href="#" th:href="@{'/students/edit/'+${student.id}}" type="button" class="btn btn-primary">Edit</a>
 				<a sec:authorize="hasRole('ADMIN')" href="#" th:href="@{'/students/delete/'+${student.id}}" type="button" class="btn btn-outline-danger">Delete</a>

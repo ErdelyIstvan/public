@@ -2,6 +2,8 @@ package com.ierdely.elective_courses.security;
 
 import static com.ierdely.elective_courses.security.SecurityRoles.*;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,12 +19,17 @@ import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 
+import com.ierdely.elective_courses.services.UsersService;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
 
     @Autowired
     private RoleHierarchy roleHierarchy;
+    
+    @Autowired
+    private UsersService usersService;
     
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -38,6 +45,8 @@ public class WebSecurityConfig {
         		.requestMatchers("/electivecourses/**").hasRole(COURSES_PAG_VIEW)
         		.requestMatchers("/coursecategories/**").hasRole(COURSES_PAG_VIEW)
         		.requestMatchers("/students/**").hasRole(STUDENTS_PAG_VIEW)
+        		.requestMatchers("/teachers/**").hasRole(TEACHERS_PAG_VIEW)
+        		.requestMatchers("/users/**").hasRole(ADMIN)
         		.requestMatchers("/enrollments/**").hasRole(ENROLLMENTS_PAG_VIEW)
         		.anyRequest().authenticated()
         	).formLogin( formLogin -> formLogin
@@ -57,16 +66,27 @@ public class WebSecurityConfig {
     public UserDetailsService userDetailsService(BCryptPasswordEncoder bCryptPasswordEncoder) {
         
     	InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withUsername("s")
-                .password(bCryptPasswordEncoder.encode("s"))
-                .roles(STUDENT)
-                .build());
+    	//add a sample ADMIN user, so we are not left witout any
         manager.createUser(User.withUsername("a")
                 .password(bCryptPasswordEncoder.encode("a"))
-                .roles(ADMIN)
+                .roles(ADMIN, STUDENT)
                 .build());
         
+        
+        
+        //add the users from the db
+        List<com.ierdely.elective_courses.entities.User> ecUsers = usersService.getAllUsers();
+        for (com.ierdely.elective_courses.entities.User ecUser : ecUsers) {
+            manager.createUser(User.withUsername(ecUser.getUsername())
+                    .password(bCryptPasswordEncoder.encode(ecUser.getPassword()))
+                    .roles(ecUser.getRoles())
+                    .build());
+        }
+        
+        
         return manager;
+        
+        
     }
     
     @Bean

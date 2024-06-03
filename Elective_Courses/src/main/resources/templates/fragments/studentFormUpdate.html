@@ -42,7 +42,13 @@
 		           th:classappend="${#fields.hasErrors('facultySection')} ? 'is-invalid'">
 		    <div class="invalid-feedback" th:errors="*{facultySection}"></div>
 		</div>
-	</div>
+		<div class="col-md-4 mb-3">
+		    <label for="user">Teacher</label>
+			<select th:field="*{user}" class="form-control" id="teacher" th:classappend="${#fields.hasErrors('user')} ? 'is-invalid'"> 
+			   	<option th:each="user:${users}" th:value="${user.id}" th:text="${user.username}"></option>
+			</select>   
+		    <div class="invalid-feedback" th:errors="*{user}"></div>
+		</div>	</div>
 
     <div class="row">
         <div class="col-md-1">

@@ -1,0 +1,25 @@
+<!doctype html>
+<html th:replace="~{layouts/main :: layout(~{::main})}" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<main role="main">
+	<div class="jumbotron">
+	    <div class="container">
+	        <div class="row">
+	            <div class="col-md-12 py-4">
+	                <h2 >Users List
+						
+	                <a href="#" th:href="@{/users/create}"  type="button" class="btn btn-primary" sec:authorize="hasRole('ADMIN')">Add User</a>
+					</h2>
+	               <div th:replace="fragments/usersList :: usersList"></div>
+	
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+</main>
+
+
+</body>
+</html>

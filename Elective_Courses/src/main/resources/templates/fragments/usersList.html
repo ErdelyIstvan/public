@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
+
+<body>
+	
+    <div class="row">
+        <div class="col-md-4" th:if="${users.isEmpty()}">
+            <div class="alert alert-warning" role="alert">
+                No USER defined yet.
+            </div>
+        </div>
+	</div>
+	<table th:fragment="usersList" class="table">
+	
+		<tr>
+			<th>Id</th>
+			<th>Username</th>
+			<th>Password</th>
+			<th>Roles</th>
+			<th>Actions</th>
+		</tr>
+		
+		<tr th:each="user:${users}">
+			<td th:text="${user.id}"></td>
+			<td th:text="${user.username}"></td>
+			<td th:text="${user.password}"></td>
+			<td th:text="${user.roles}"></td>
+			<td>	
+				<a sec:authorize="hasRole('ADMIN')" href="#" th:href="@{'/users/edit/'+${user.id}}" type="button" class="btn btn-primary">Edit</a>
+				<a sec:authorize="hasRole('ADMIN')" href="#" th:href="@{'/users/delete/'+${user.id}}" type="button" class="btn btn-outline-danger">Delete</a>
+			</td>
+		</tr>
+	
+	</table>
+</body>
+</html>

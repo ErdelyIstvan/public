@@ -14,7 +14,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-@AllArgsConstructor
+
 @Entity
 @Data
 public class Student {
@@ -42,6 +42,11 @@ public class Student {
 	
 	@Pattern(regexp = "[A-Za-z ]*", message = "Faculty Section contains illegal characters")
 	private String facultySection;
+	
+	@NotNull
+	@OneToOne
+	@JoinColumn(name ="user_id")
+	private User user;
 	
 	public int getId() {
 		
@@ -101,6 +106,16 @@ public class Student {
 	public void setFacultySection(String facultySection) {
 		
 		this.facultySection = facultySection;
+	}
+	
+	public User getUser() {
+		
+		return user;
+	}
+
+	public void setUset(User user) {
+		
+		this.user = user;
 	}
 
 }
