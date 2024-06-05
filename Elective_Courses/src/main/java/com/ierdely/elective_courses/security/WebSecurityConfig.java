@@ -1,8 +1,10 @@
 package com.ierdely.elective_courses.security;
 
-import static com.ierdely.elective_courses.security.SecurityRoles.*;
-
-import java.util.List;
+import static com.ierdely.elective_courses.security.SecurityRoles.ADMIN;
+import static com.ierdely.elective_courses.security.SecurityRoles.COURSES_PAG_VIEW;
+import static com.ierdely.elective_courses.security.SecurityRoles.ENROLLMENTS_PAG_VIEW;
+import static com.ierdely.elective_courses.security.SecurityRoles.STUDENTS_PAG_VIEW;
+import static com.ierdely.elective_courses.security.SecurityRoles.TEACHERS_PAG_VIEW;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,15 +13,10 @@ import org.springframework.security.access.expression.SecurityExpressionHandler;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
-
-import com.ierdely.elective_courses.services.UsersService;
 
 @Configuration
 @EnableWebSecurity
@@ -28,13 +25,18 @@ public class WebSecurityConfig {
     @Autowired
     private RoleHierarchy roleHierarchy;
     
-    @Autowired
-    private UsersService usersService;
+//    @Autowired
+//    private ECUsersDetailedService usersService;
     
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+    
+//    @Bean
+//    ECUsersDetailedService usersService(BCryptPasswordEncoder passwordEncoder) {
+//    	return new ECUsersDetailedService(passwordEncoder);
+//    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -62,32 +64,38 @@ public class WebSecurityConfig {
     }
  
     
-    @Bean
-    public UserDetailsService userDetailsService(BCryptPasswordEncoder bCryptPasswordEncoder) {
-        
-    	InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-    	//add a sample ADMIN user, so we are not left witout any
-        manager.createUser(User.withUsername("a")
-                .password(bCryptPasswordEncoder.encode("a"))
-                .roles(ADMIN, STUDENT)
-                .build());
-        
-        
-        
-        //add the users from the db
-        List<com.ierdely.elective_courses.entities.User> ecUsers = usersService.getAllUsers();
-        for (com.ierdely.elective_courses.entities.User ecUser : ecUsers) {
-            manager.createUser(User.withUsername(ecUser.getUsername())
-                    .password(bCryptPasswordEncoder.encode(ecUser.getPassword()))
-                    .roles(ecUser.getRoles())
-                    .build());
-        }
+//    @Bean
+//    public UserDetailsService userDetailsService(BCryptPasswordEncoder bCryptPasswordEncoder) {
+//        
+//    	InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+//    	//add a sample ADMIN user, so we are not left witout any
+//        manager.createUser(User.withUsername("a")
+//                .password(bCryptPasswordEncoder.encode("a"))
+//                .roles(ADMIN, STUDENT)
+//                .build());
         
         
-        return manager;
-        
-        
-    }
+//    	
+//    	//add a sample ADMIN user, so we are not left witout any
+//        usersService.createUser(User.withUsername("a")
+//                .password(bCryptPasswordEncoder.encode("a"))
+//                .roles(ADMIN, STUDENT)
+//                .build());
+//        
+//        //add the users from the db
+//        List<com.ierdely.elective_courses.entities.User> ecUsers = usersService.getAllUsers();
+//        for (com.ierdely.elective_courses.entities.User ecUser : ecUsers) {
+//            manager.createUser(User.withUsername(ecUser.getUsername())
+//                    .password(bCryptPasswordEncoder.encode(ecUser.getPassword()))
+//                    //.roles(ecUser.getRoles()
+//                    .build());
+//        }
+//        
+//        
+//        return usersService;
+//        
+//        
+//    }
     
     @Bean
     SecurityExpressionHandler<FilterInvocation> expressionHandler() {

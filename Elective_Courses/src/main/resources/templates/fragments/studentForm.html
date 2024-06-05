@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
 
 <body>
-	<form th:fragment="studentForm" method="post" action="#" th:action="@{/students/create}" th:object="${student}">
+	<form th:fragment="studentForm" method="post" action="#" th:action="@{/students/create}" th:object="${studentDTO}">
 
 		<div class="row">
 	        <div class="col-md-4 mb-3">
@@ -18,13 +18,12 @@
 			    <div class="invalid-feedback" th:errors="*{surname}"></div>
 			</div>
 			<div class="col-md-4 mb-3">
-			    <label for="user">User</label>
-					<select th:field="*{user}" class="form-control" id="user" th:classappend="${#fields.hasErrors('user')} ? 'is-invalid'"> 
-					   	<option th:each="user:${users}" th:value="${user.id}" th:text="${user.username}"></option>
-					</select>   
-			    <div class="invalid-feedback" th:errors="*{user}"></div>
+			    <label for="userDTO">User</label>
+				<select th:field="*{userDTO}" class="form-control" id="userDTO" th:classappend="${#fields.hasErrors('userDTO')} ? 'is-invalid'"> 
+				   	<option th:each="userDTO:${userDTOs}" th:value="${userDTO}" th:text="${userDTO.username}"></option>
+				</select>   
+			    <div class="invalid-feedback" th:errors="*{userDTO}"></div>
 			</div>
-
 	    </div>
 
 	    <div class="row">

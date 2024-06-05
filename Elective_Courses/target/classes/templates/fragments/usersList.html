@@ -15,7 +15,7 @@
 		<tr>
 			<th>Id</th>
 			<th>Username</th>
-			<th>Password</th>
+			
 			<th>Roles</th>
 			<th>Actions</th>
 		</tr>
@@ -23,8 +23,10 @@
 		<tr th:each="user:${users}">
 			<td th:text="${user.id}"></td>
 			<td th:text="${user.username}"></td>
-			<td th:text="${user.password}"></td>
-			<td th:text="${user.roles}"></td>
+			
+			<td>
+			        <span th:each="role : ${user.roles}" th:text="${role.name} + ' '"></span>
+			      </td>
 			<td>	
 				<a sec:authorize="hasRole('ADMIN')" href="#" th:href="@{'/users/edit/'+${user.id}}" type="button" class="btn btn-primary">Edit</a>
 				<a sec:authorize="hasRole('ADMIN')" href="#" th:href="@{'/users/delete/'+${user.id}}" type="button" class="btn btn-outline-danger">Delete</a>

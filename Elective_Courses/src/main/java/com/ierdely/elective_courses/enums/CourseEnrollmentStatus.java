@@ -1,6 +1,6 @@
 package com.ierdely.elective_courses.enums;
 
-public enum CourseEnrollmentStatus {
+public enum CourseEnrollmentStatus { 
 
 	PRELIMINARY,
 	PREFERENCE,

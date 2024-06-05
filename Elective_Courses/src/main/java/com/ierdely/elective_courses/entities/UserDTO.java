@@ -17,44 +17,30 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-@Entity
-@Data
-@Table(name = "ec_user")
-public class User {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO )
+public class UserDTO {
+
+
 	private Integer id;
-	
-	@Column(name="username", nullable = false, unique = true)
-	@UniqueUsername
+
     private String username;
 	
-	@NotBlank
 	private String password;
 	
-    @ManyToMany
-    @JoinTable(
-        name = "users_roles", 
-        joinColumns = @JoinColumn(
-           name = "user_id", referencedColumnName = "id"), 
-        inverseJoinColumns = @JoinColumn(
-           name = "role_id", referencedColumnName = "id")) 
-	private Collection<Role> roles;
-    
-    public User() {
-    	
+    private Collection<RoleDTO> roles;
+	
+    public UserDTO (User user) {
+    	setId(user.getId());
+    	username = user.getUsername();
+    	password = user.getPassword();
+
+    	this.roles = new ArrayList<RoleDTO>();
+    	for (Role role : user.getRoles()) {
+			addRole( new RoleDTO(role));
+		}
+
     }
 	
-	public User (UserDTO userDTO) {
-		this.id = userDTO.getId();
-		this.username = userDTO.getUsername();
-		this.password = userDTO.getPassword();
-		this.roles = new ArrayList<Role>();
-		for (RoleDTO roleDTO : userDTO.getRoles()) {
-			addRole(new Role(roleDTO));
-		}
-	}
 	public Integer getId() {
 		
 		return id;
@@ -85,18 +71,18 @@ public class User {
 		this.password = password;
 	}
 
-	public Collection<Role> getRoles() {
+	public Collection<RoleDTO> getRoles() {
 		
 		return roles;
 	}
 
-	public void setRoles(Collection<Role> roles) {
+	public void setRoles(Collection<RoleDTO> roleDTOs) {
 
-		this.roles = roles;
+		this.roles = roleDTOs;
 	}
 	
-	public void addRole(Role role) {
+	public void addRole(RoleDTO roleDTO) {
 
-		this.roles.add(role);
+		this.roles.add(roleDTO);
 	}
 }

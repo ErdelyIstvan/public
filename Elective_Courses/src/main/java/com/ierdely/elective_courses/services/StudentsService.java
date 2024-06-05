@@ -1,14 +1,15 @@
 package com.ierdely.elective_courses.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.ierdely.elective_courses.entities.Student;
+import com.ierdely.elective_courses.entities.StudentDTO;
 import com.ierdely.elective_courses.entities.User;
 import com.ierdely.elective_courses.repositories.StudentsRepository;
-import com.ierdely.elective_courses.repositories.UsersRepository;
 
 @Service
 public class StudentsService {
@@ -31,25 +32,48 @@ public class StudentsService {
 		return studentsRepository.findByUser(user);
 	}
 	
-	public Optional<Student> getStudent(Integer id) {
+	public Optional<StudentDTO> getStudent(Integer id) {
 		
-		return studentsRepository.findById(id);
+		Optional<Student> studentOp = studentsRepository.findById(id);
+		if (studentOp.isPresent()) {
+			return Optional.of(new StudentDTO(studentOp.get()));
+		}
+		return Optional.empty();
+		
 	}
 	
-	public void save(Student student) {
+	public void save(StudentDTO studentDTO) {
 		
-		studentsRepository.save(student);
+		Student toSave;
+		if (studentDTO.getId() == null) {
+			toSave = new Student(studentDTO);
+		} else {
+			Optional<Student> toSaveOptional = studentsRepository.findById(studentDTO.getId());
+			if (toSaveOptional.isEmpty()) {
+				throw new RuntimeException("Student with id: " + studentDTO.getId() + " can not be found!");
+			} else {
+				toSave = toSaveOptional.get();
+				toSave.copyFrom(studentDTO);
+			}
+		}
+		studentsRepository.save(toSave);
 	}
+	
 
-	public List<Student> getAllStudents() {
+	public List<StudentDTO> getAllStudents() {
 		
-		return studentsRepository.findAll();
+		List<Student>  students = studentsRepository.findAll();
+		List<StudentDTO> studentsRet = new ArrayList<StudentDTO>();
+		for (Student student : students) {
+			studentsRet.add(new StudentDTO(student));
+		}
+		return studentsRet;
 	}
 	
-	public void delete(Student student) {
+	public void delete(StudentDTO studentDTO) {
 		
-		if (student != null) {
-			studentsRepository.deleteById(student.getId());			
+		if (studentDTO != null) {
+			studentsRepository.deleteById(studentDTO.getId());			
 		}
 	}
 }

@@ -9,3 +9,4 @@ values (1, 'OOP', 5, 3, 'FE', 'Shops');
 
 insert into ElectiveCourse (id, title, maxAllowedStudents, studyYear, category, teacherName)
 values (2, 'DB', 5, 3, 'BE', 'Popa');
+

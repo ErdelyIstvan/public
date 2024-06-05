@@ -14,22 +14,24 @@
 		</div>
 		<div class="col-md-4 mb-3">
 		    <label for="username">Username</label>
-		    <input type="text" class="form-control" id="username" th:field="*{username}"
-		           th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'">
-		    <div class="invalid-feedback" th:errors="*{username}"></div>
+		    <output type="text" class="form-control" id="username" th:field="*{username}"
+		           th:text="*{username}">
 		</div>
 		<div class="col-md-4 mb-3">
 		    <label for="password">Password</label>
-		    <input type="text" class="form-control" id="password" th:field="*{password}"
+		    <input type="password" class="form-control" id="password" th:field="*{password}"
 		           th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'">
 		    <div class="invalid-feedback" th:errors="*{password}"></div>
 		</div>
+
 		<div class="col-md-4 mb-3">
-		    <label for="roles">Rols</label>
-		    <input type="text" class="form-control" id="roles" th:field="*{roles}"
-		           th:classappend="${#fields.hasErrors('roles')} ? 'is-invalid'">
-		    <div class="invalid-feedback" th:errors="*{roles}"></div>
+			<label>Roles      </label>
+			<div th:each="role : ${allroles}">
+		        <input type="checkbox" th:field="*{roles}" th:value="${role.id}" />
+		        <label th:for="${#ids.prev('roles')}" th:text="${role.name} + '  '"></label>
+		    </div>
 		</div>
+			
 	</div>
 
     <div class="row">

@@ -18,7 +18,7 @@ public class Teacher {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO )
-	int id;
+	Integer id;
 	
 	@NotBlank(message="First name can not be blank.")
     @Pattern(regexp = "[A-Za-z ]*", message = "First name contains illegal characters")
@@ -32,12 +32,12 @@ public class Teacher {
 	private String email;
 
 	
-	public int getId() {
+	public Integer getId() {
 		
 		return id;
 	}
 	
-	public void setId(int id) {
+	public void setId(Integer id) {
 		
 		this.id = id;
 	}

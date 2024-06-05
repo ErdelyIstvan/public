@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import com.ierdely.elective_courses.enums.CourseEnrollmentStatus;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -36,6 +38,7 @@ public class Enrollment {
 	private LocalDate enrollmentDate;
 
 	@NotBlank
+	@Enumerated(EnumType.STRING)
 	private CourseEnrollmentStatus enrollment_status;
 	
 }

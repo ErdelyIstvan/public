@@ -1,27 +1,14 @@
 package com.ierdely.elective_courses.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import lombok.Data;
 
 
-@Entity
-@Data
-public class Student {
+public class StudentDTO {
 	
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO )
 	private Integer id;
 	
 	@NotBlank(message="First name can not be blank.")
@@ -44,31 +31,20 @@ public class Student {
 	private String facultySection;
 	
 	@NotNull
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name ="user_id")
-	private User user;
+	private UserDTO userDTO;
 	
-	public Student() {
+	public StudentDTO() {
 		
 	}
 	
-	public Student(StudentDTO studentDTO) {
-		this.id = studentDTO.getId();
-		this.firstName = studentDTO.getFirstName();
-		this.surname = studentDTO.getSurname();
-		this.grade = studentDTO.getGrade();
-		this.studyYear = studentDTO.getStudyYear();
-		this.facultySection = studentDTO.getFacultySection();
-		this.user = new User(studentDTO.getUserDTO());
-	}
-	
-	public void copyFrom(StudentDTO studentDTO) {
-		this.firstName = studentDTO.getFirstName();
-		this.surname = studentDTO.getSurname();
-		this.grade = studentDTO.getGrade();
-		this.studyYear = studentDTO.getStudyYear();
-		this.facultySection = studentDTO.getFacultySection();
-		this.user = new User(studentDTO.getUserDTO());
+	public StudentDTO(Student student) {
+		this.id = student.getId();
+		this.firstName = student.getFirstName();
+		this.surname = student.getSurname();
+		this.grade = student.getGrade();
+		this.studyYear = student.getStudyYear();
+		this.facultySection = student.getFacultySection();
+		this.userDTO = new UserDTO(student.getUser());
 	}
 	
 	public Integer getId() {
@@ -131,14 +107,14 @@ public class Student {
 		this.facultySection = facultySection;
 	}
 	
-	public User getUser() {
+	public UserDTO getUserDTO() {
 		
-		return user;
+		return userDTO;
 	}
 
-	public void setUser(User user) {
+	public void setUserDTO(UserDTO userDTO) {
 		
-		this.user = user;
+		this.userDTO = userDTO;
 	}
 
 }

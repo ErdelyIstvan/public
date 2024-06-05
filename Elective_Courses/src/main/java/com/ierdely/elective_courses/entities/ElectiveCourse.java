@@ -22,7 +22,7 @@ public class ElectiveCourse {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO )
-	int id;
+	Integer id;
 	
 	@NotBlank(message = "'Title' can not be blank.")
 	private String title;
@@ -44,11 +44,11 @@ public class ElectiveCourse {
 	@JoinColumn(name = "teacher_id")
 	private Teacher teacher;
 	
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 	
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	

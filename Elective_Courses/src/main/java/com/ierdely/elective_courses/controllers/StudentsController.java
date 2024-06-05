@@ -15,14 +15,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ierdely.elective_courses.entities.Student;
+import com.ierdely.elective_courses.entities.StudentDTO;
 import com.ierdely.elective_courses.entities.User;
-import com.ierdely.elective_courses.repositories.StudentsRepository;
+import com.ierdely.elective_courses.entities.UserDTO;
 import com.ierdely.elective_courses.repositories.UsersRepository;
 import com.ierdely.elective_courses.security.annotations.students.IsStudentsCreate;
 import com.ierdely.elective_courses.security.annotations.students.IsStudentsDelete;
 import com.ierdely.elective_courses.security.annotations.students.IsStudentsRead;
 import com.ierdely.elective_courses.security.annotations.students.IsStudentsUpdate;
 import com.ierdely.elective_courses.services.StudentsService;
+import com.ierdely.elective_courses.services.UsersService;
 
 @Controller
 public class StudentsController {
@@ -31,13 +33,13 @@ public class StudentsController {
 	private StudentsService studentsService;
 	
 	@Autowired
-	private UsersRepository usersRepository;
+	private UsersService usersService;
 	
 	@IsStudentsRead
 	@GetMapping("/students")
 	public ModelAndView index() {
 
-		List<Student> students = studentsService.getAllStudents();
+		List<StudentDTO> students = studentsService.getAllStudents();
 		ModelAndView mav = new ModelAndView("students");
 		mav.addObject("students", students);
 		return mav;
@@ -47,9 +49,9 @@ public class StudentsController {
     @GetMapping("/students/create")
     public ModelAndView create() {
 		
-		ModelAndView mav = new ModelAndView("student-create", "student", new Student());
-		List<User> users = usersRepository.findAll();
-		mav.addObject("users", users);
+		ModelAndView mav = new ModelAndView("student-create", "studentDTO", new StudentDTO());
+		List<UserDTO> users = usersService.getUsers();
+		mav.addObject("userDTOs", users);
 
 		              
         return mav;
@@ -57,15 +59,15 @@ public class StudentsController {
 	
 	@IsStudentsCreate
     @PostMapping("/students/create")
-    public String create(@ModelAttribute @Validated Student newStudent, BindingResult bindingResult, Model model) {
+    public String create(@ModelAttribute @Validated StudentDTO studentDTO, BindingResult bindingResult, Model model) {
 		
         if (bindingResult.hasErrors()) {
-    		List<User> users = usersRepository.findAll();
-    		model.addAttribute("users", users);
+        	List<UserDTO> users = usersService.getUsers();
+    		model.addAttribute("userDTOs", users);
   
             return "student-create";
         } else {
-        	studentsService.save(newStudent);
+        	studentsService.save(studentDTO);
             return "redirect:/students";
         }
         
@@ -76,7 +78,7 @@ public class StudentsController {
     @GetMapping("students/delete/{id}")
     public String delete(@PathVariable("id") Integer id) {
 		
-		Optional<Student> student = studentsService.getStudent(id);
+		Optional<StudentDTO> student = studentsService.getStudent(id);
 		if (student.isPresent()) {
 			studentsService.delete(student.get());			
 		}
@@ -89,12 +91,12 @@ public class StudentsController {
     @GetMapping("/students/edit/{id}")
     public ModelAndView showUpdate(@PathVariable("id") Integer id) {
 
-		Student student = studentsService.getStudent(id)
+		StudentDTO student = studentsService.getStudent(id)
 	    	      .orElseThrow(() -> new IllegalArgumentException("Invalid Student Id:" + id));
 		
 		ModelAndView mav = new ModelAndView("student-update", "student", student);
-		List<User> users = usersRepository.findAll();
-		mav.addObject("users", users);
+		List<UserDTO> users = usersService.getUsers();
+		mav.addObject("userDTOs", users);
 
         return mav;
     }
@@ -102,7 +104,7 @@ public class StudentsController {
 	@IsStudentsUpdate
     @GetMapping("/students/update/{id}")
     public String update(@PathVariable("id") Integer id, 
-    		@ModelAttribute @Validated Student student, 
+    		@ModelAttribute @Validated StudentDTO student, 
     		BindingResult bindingResult, Model model) {
 		
         if (bindingResult.hasErrors()) {
