@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:th="http://www.thymeleaf.org/">
+
+<body>
+	
+    <div class="row">
+        <div class="col-md-4" th:if="${electivecourses.isEmpty()}">
+            <div class="alert alert-warning" role="alert">
+                No elective course defined yet.
+            </div>
+        </div>
+	</div>
+	
+	<table th:fragment="eligibleelectiveCourseList" class="table">
+	<div class="row">
+	    <div class="col-md-6 mb-3">
+	        <label >Number of courses with distinct category enrolled into: </label>
+		   <output th:field="${data.numberOfDistincCategoryEnrollments}"  th:text="${data.numberOfDistincCategoryEnrollments}"> 
+		   </output>
+	    </div>
+	</div>
+	<div class="row">
+	    <div class="col-md-6 mb-3">
+	        <label >Minimum number of courses with distinct category to enroll into: </label>
+		   <output th:field="${data.minimumNumberOfEnrollments}"  th:text="${data.minimumNumberOfEnrollments}"> 
+		   </output>
+	    </div>
+	</div>
+		<tr>
+			<th>Title</th>
+			<th>Enrolled / Max Allowed Students</th>
+			<th>Category</th>
+			<th>Actions</th>
+		</tr>
+		
+		<tr th:each="course:${data.courses}">
+			<td th:text="${course.course.title}"></td>
+			<td th:text="${course.numberOfEnrollments} + ' / ' + ${course.course.maxAllowedStudents}"></td>
+			<td th:text="${course.course.category.getCategory()}"></td>
+			<td>	
+				
+				<a th:if="${course.currentUserEnrollment == null}" href="#" th:href="@{'/electivecourses/enroll/'+${course.course.id}}" type="button" class="btn btn-primary">Enroll</a>
+				<a th:if="${course.currentUserEnrollment != null}" href="#" th:href="@{'/electivecourses/withdrawn/'+${course.currentUserEnrollment.id}}" type="button" class="btn btn-primary">Withdrawn</a>
+			
+			</td>
+		</tr>
+	
+	</table>
+
+	
+</body>
+</html>

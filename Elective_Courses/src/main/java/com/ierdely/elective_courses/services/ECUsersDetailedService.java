@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,6 +17,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ierdely.elective_courses.dto.RoleDTO;
+import com.ierdely.elective_courses.dto.UserDTO;
 import com.ierdely.elective_courses.entities.Role;
 import com.ierdely.elective_courses.entities.User;
 import com.ierdely.elective_courses.repositories.RolesRepository;
@@ -32,6 +36,8 @@ public class ECUsersDetailedService implements UserDetailsService {
 	
 	 
     private BCryptPasswordEncoder passwordEncoder;
+    
+    private ModelMapper modelMapper;
 	
 	//@Autowired
     //private IUserService service;
@@ -39,11 +45,13 @@ public class ECUsersDetailedService implements UserDetailsService {
 	@Autowired //not needed, it is the only constructor, Spring does the autowireing anyway
 	public ECUsersDetailedService(BCryptPasswordEncoder passwordEncoder, 
 			UsersRepository usersRepository, 
-			RolesRepository rolesRepository) {
+			RolesRepository rolesRepository,
+			ModelMapper modelMapper) {
 		
 		this.passwordEncoder = passwordEncoder;
 		this.usersRepository = usersRepository;
 		this.rolesRepository = rolesRepository;
+		this.modelMapper = modelMapper;
 	}
 	
     @Override
@@ -111,9 +119,17 @@ public class ECUsersDetailedService implements UserDetailsService {
 //		return usersRepository.findByStudent(student);
 //	}
 	
-	public Optional<User> getUser(Long id) {
+	public Optional<UserDTO> getUser(Long id) {
+		Optional<User> opUser = usersRepository.findById(id);
+		if(opUser.isEmpty()) {
+			return Optional.empty();
+		}
+		return Optional.of(modelMapper.map(opUser.get(), UserDTO.class));
+	}
+	
+	public UserDTO getUser(String username) {
 		
-		return usersRepository.findById(id);
+		return modelMapper.map(usersRepository.findByUsername(username), UserDTO.class);
 	}
 	
 	public void deleteUserById(Long id) {
@@ -126,49 +142,33 @@ public class ECUsersDetailedService implements UserDetailsService {
 		return usersRepository.save(user);
 	}
 	
-	public List<User> getAllUsers() {
+	public List<UserDTO> getAllUsers() {
 		
-		return usersRepository.findAll();
-	}
-	
-	public List<Role> getAllRoles() {
-		
-		return rolesRepository.findAll();
+		return usersRepository.findAll().stream().map(user -> modelMapper.map(user, UserDTO.class))
+				.collect(Collectors.toList());
 	}
 	
 
-	public User saveUserAccount(User inputUser) throws RuntimeException {
-	    User userToSave;
-	    Optional<User> loadedUser;
-	    if(inputUser.getId() != null) {
-	    	loadedUser = usersRepository.findById(inputUser.getId());
-	    	if (loadedUser.isEmpty()) {
-	    		throw new RuntimeException("Can not find user with id: " + inputUser.getId());
-	    	}
-	    	userToSave = loadedUser.get();
-	    } else {
-	    	//it is a new save
-	    	userToSave = new User();
-	    	//only copy the username from the dto if we create a new user, 
-	    	// username should not be changable
-	    	userToSave.setUsername(inputUser.getUsername());
-	    }
+	
+	public List<RoleDTO> getAllRoles() {
+		
+		return rolesRepository.findAll().stream().map(role -> modelMapper.map(role, RoleDTO.class))
+				.collect(Collectors.toList());
+	}
+	
+	public RoleDTO getRole(String roleName) {
+		
+		return modelMapper.map(rolesRepository.findByName(roleName), RoleDTO.class);
+	}
 
-	    userToSave.setPassword(passwordEncoder.encode(inputUser.getPassword()));
+	public User saveUserAccount(UserDTO inputUser) throws RuntimeException {
 
-	    userToSave.setRoles(inputUser.getRoles());
-
+		String iPass = inputUser.getPassword();
+		String ePass = passwordEncoder.encode(iPass);
+		User userToSave = modelMapper.map(inputUser, User.class);
+		userToSave.setPassword(ePass);
+		
 	    return usersRepository.save(userToSave);
 	}
-	
-	public boolean usernameTakenByOtherUser(Long id, String username) {
-		User user = usersRepository.findByUsername(username);
-		if (user == null) {
-			return false;
-		}
-		if (id == null) {
-			return true;
-		}
-		return !user.getId().equals(id);
-	}
+
 }

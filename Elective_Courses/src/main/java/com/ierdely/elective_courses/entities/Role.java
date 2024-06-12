@@ -7,8 +7,17 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Role {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,48 +28,4 @@ public class Role {
     @ManyToMany(mappedBy = "roles")
     private Collection<User> users;
     
-    public Role (String name) {
-    	
-    	this.name = name;
-    }
-
-    public Role() {
-    	
-    }
-
-    public Role (RoleDTO roleDTO) {
-
-    	this.id = roleDTO.getId();
-    	this.name = roleDTO.getName();
-    }
-    
-	public Long getId() {
-		
-		return id;
-	}
-
-	public void setId(Long id) {
-		
-		this.id = id;
-	}
-
-	public String getName() {
-		
-		return name;
-	}
-
-	public void setName(String name) {
-		
-		this.name = name;
-	}
-
-	public Collection<User> getUsers() {
-		
-		return users;
-	}
-
-	public void setUsers(Collection<User> users) {
-		
-		this.users = users;
-	}
 }

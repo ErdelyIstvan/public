@@ -1,4 +1,4 @@
-package com.ierdely.elective_courses.entities.annotations;
+package com.ierdely.elective_courses;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

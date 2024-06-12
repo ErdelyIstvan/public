@@ -9,8 +9,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Data
 public class Teacher {
@@ -30,46 +32,5 @@ public class Teacher {
 
 	@Email(message = "EMail address must be valid.")
 	private String email;
-
-	
-	public Integer getId() {
-		
-		return id;
-	}
-	
-	public void setId(Integer id) {
-		
-		this.id = id;
-	}
-	
-	public String getFirstName() {
-
-		return firstName;
-	}
-	
-	public void setFirstName(String firstName) {
-		
-		this.firstName = firstName;
-	}
-	
-	public String getSurname() {
-	
-		return surname;
-	}
-	
-	public void setSurname(String surname) {
-	
-		this.surname = surname;
-	}
-	
-	public String getEmail() {
-		
-		return email;
-	}
-	
-	public void setEmail(String email) {
-	
-		this.email = email;
-	}
 
 }

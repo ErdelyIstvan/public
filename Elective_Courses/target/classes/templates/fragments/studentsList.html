@@ -4,8 +4,8 @@
 <body>
 	
     <div class="row">
-        <div class="col-md-4" th:if="${students.isEmpty()}">
-            <div class="alert alert-warning" role="alert">
+        <div class="col-md-4" >
+            <div class="alert alert-warning" >
                 No STUDENT defined yet.
             </div>
         </div>
@@ -30,7 +30,7 @@
 			<td th:text="${student.grade}"></td>
 			<td th:text="${student.studyYear}"></td>
 			<td th:text="${student.facultySection}"></td>
-			<td th:text="${student.user}"></td>
+			<td th:text="${student.userDto}"></td>
 			<td>	
 				<a sec:authorize="hasRole('ADMIN')" href="#" th:href="@{'/students/edit/'+${student.id}}" type="button" class="btn btn-primary">Edit</a>
 				<a sec:authorize="hasRole('ADMIN')" href="#" th:href="@{'/students/delete/'+${student.id}}" type="button" class="btn btn-outline-danger">Delete</a>

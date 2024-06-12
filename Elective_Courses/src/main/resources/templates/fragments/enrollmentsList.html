@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
+
+<body>
+	
+   
+	<table th:fragment="enrollmentsList" class="table">
+	
+		<tr>
+			<th>Id</th>
+			<th>Course</th>
+			<th>Student</th>
+			<th>Enrollment Date</th>
+			<th>Enrollment Status</th>
+			<th>Actions</th>
+		</tr>
+		
+		<tr th:each="enrollment:${enrollments}">
+			<td th:text="${enrollment.id}"></td>
+			<td th:text="${enrollment.course.title}"></td>
+			<td th:text="${enrollment.user.firstName} + ' ' + ${enrollment.user.surname}"></td>
+			<td th:text="${enrollment.enrollmentDate}"></td>
+			<td th:text="${enrollment.enrollmentStatus}"></td>
+			<td>	
+				<a sec:authorize="hasRole('ADMIN')" href="#" th:href="@{'/enrollments/delete/'+${enrollment.id}}" type="button" class="btn btn-outline-danger">Delete</a>
+			</td>
+		</tr>
+	
+	</table>
+</body>
+</html>

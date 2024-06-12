@@ -14,15 +14,21 @@
 			<li sec:authorize="hasRole('ADMIN')" class="nav-item" >
 			    <a class="nav-link" href="#" th:href="@{/users}" >Users</a>
 			</li>
+			<li sec:authorize="!hasRole('ADMIN')" class="nav-item" >
+			    <a class="nav-link" href="#" th:href="@{/pears}" >Pears</a>
+			</li>
 			<li class="nav-item">
-                <a class="nav-link" href="#" th:href="@{/students}">Students</a>
-            </li>
+			    <a sec:authorize="hasRole('ADMIN')" class="nav-link" href="#" th:href="@{/enrollments}">Enrollments</a>
+			</li>
 			<li class="nav-item">
 			    <a sec:authorize="hasRole('ADMIN')" class="nav-link" href="#" th:href="@{/teachers}">Teachers</a>
 			</li>
-            <li class="nav-item">
-                <a class="nav-link" href="#" th:href="@{/electivecourses}">Elective Courses</a>
-            </li>
+			<li sec:authorize="hasRole('ADMIN')" class="nav-item">
+			    <a class="nav-link" href="#" th:href="@{/electivecourses}">Elective Courses</a>
+			</li>
+			<li sec:authorize="hasRole('STUDENT')" class="nav-item">
+			    <a class="nav-link" href="#" th:href="@{/eligibleelectivecourses}">Eligible Elective Courses</a>
+			</li>
 			<li class="nav-item">
 			    <a class="nav-link" href="#" th:href="@{/coursecategories}">Course Categories</a>
 			</li>

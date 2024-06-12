@@ -38,7 +38,7 @@ public class SetupDataLoader implements
         if (alreadySetup)
             return;
         
-        User admin = userRepository.findByUsername("ADMIN");
+        User admin = userRepository.findByUsername("a");
         if(admin != null) {
         	return;
         }
@@ -48,11 +48,19 @@ public class SetupDataLoader implements
         createRoleIfNotFound("ROLE_ADMIN");
         createRoleIfNotFound("ROLE_STUDENT");
 
-        Role adminRole = roleRepository.findByName("ROLE_ADMIN");
+        Role adminRole = roleRepository.findByName("ROLE_ADMIN");        
+        Role studentRole = roleRepository.findByName("ROLE_STUDENT");
         User user = new User();
-        user.setUsername("ADMIN");
-        user.setPassword(passwordEncoder.encode("A"));
-        user.setRoles(Arrays.asList(adminRole));
+        user.setUsername("a");
+        user.setPassword(passwordEncoder.encode("a"));
+        user.setRoles(Arrays.asList(adminRole, studentRole));
+        
+        user.setFirstName("Adrian");
+        user.setSurname("Popescu");
+        user.setFacultySection("TI");
+        user.setGrade(10);
+        user.setStudyYear((byte)5);
+        
         userRepository.save(user);
 
         alreadySetup = true;
@@ -65,7 +73,8 @@ public class SetupDataLoader implements
  
         Role role = roleRepository.findByName(name);
         if (role == null) {
-            role = new Role(name);
+            role = new Role();
+            role.setName(name);
             
             roleRepository.save(role);
         }

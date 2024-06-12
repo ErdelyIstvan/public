@@ -1,7 +1,6 @@
 package com.ierdely.elective_courses.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,26 +13,30 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ierdely.elective_courses.entities.Student;
-import com.ierdely.elective_courses.entities.StudentDTO;
-import com.ierdely.elective_courses.entities.User;
-import com.ierdely.elective_courses.entities.UserDTO;
-import com.ierdely.elective_courses.repositories.UsersRepository;
+import com.ierdely.elective_courses.dto.StudentDTO;
+import com.ierdely.elective_courses.dto.UserDTO;
+import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesDelete;
 import com.ierdely.elective_courses.security.annotations.students.IsStudentsCreate;
-import com.ierdely.elective_courses.security.annotations.students.IsStudentsDelete;
 import com.ierdely.elective_courses.security.annotations.students.IsStudentsRead;
 import com.ierdely.elective_courses.security.annotations.students.IsStudentsUpdate;
+import com.ierdely.elective_courses.services.ECUsersDetailedService;
 import com.ierdely.elective_courses.services.StudentsService;
-import com.ierdely.elective_courses.services.UsersService;
 
 @Controller
 public class StudentsController {
 	
-	@Autowired
 	private StudentsService studentsService;
+	private ECUsersDetailedService usersService;
+
 	
 	@Autowired
-	private UsersService usersService;
+	public StudentsController(StudentsService studentsService, 
+			ECUsersDetailedService usersService) {
+		
+		this.studentsService = studentsService;
+		this.usersService = usersService;
+
+	}
 	
 	@IsStudentsRead
 	@GetMapping("/students")
@@ -45,75 +48,65 @@ public class StudentsController {
 		return mav;
 	}
 	
+
+	  
 	@IsStudentsCreate
     @GetMapping("/students/create")
-    public ModelAndView create() {
-		
-		ModelAndView mav = new ModelAndView("student-create", "studentDTO", new StudentDTO());
-		List<UserDTO> users = usersService.getUsers();
-		mav.addObject("userDTOs", users);
+    public ModelAndView studentForm() {
 
-		              
+		StudentDTO student = new StudentDTO();
+//		UserDTO userDto = new UserDTO();
+//		student.setUserDto(userDto);
+		ModelAndView mav = new ModelAndView("student-create", "student", student);
+		//mav.addObject("userDtos", usersService.getUsersWithoutAssignedStudent());
         return mav;
     }
 	
 	@IsStudentsCreate
     @PostMapping("/students/create")
-    public String create(@ModelAttribute @Validated StudentDTO studentDTO, BindingResult bindingResult, Model model) {
+    public String create(@ModelAttribute("student") @Validated StudentDTO student, BindingResult bindingResult, Model model) {
 		
         if (bindingResult.hasErrors()) {
-        	List<UserDTO> users = usersService.getUsers();
-    		model.addAttribute("userDTOs", users);
-  
+        	//model.addAttribute("userDtos", usersService.getUsersWithoutAssignedStudent());
             return "student-create";
         } else {
-        	studentsService.save(studentDTO);
+        	studentsService.save(student);
             return "redirect:/students";
         }
         
     }
     
 
-	@IsStudentsDelete
+	@IsElectiveCoursesDelete
     @GetMapping("students/delete/{id}")
     public String delete(@PathVariable("id") Integer id) {
 		
-		Optional<StudentDTO> student = studentsService.getStudent(id);
-		if (student.isPresent()) {
-			studentsService.delete(student.get());			
-		}
+    	studentsService.delete(id);
 
         return "redirect:/students";
     }
 	
-
 	@IsStudentsUpdate
     @GetMapping("/students/edit/{id}")
     public ModelAndView showUpdate(@PathVariable("id") Integer id) {
-
-		StudentDTO student = studentsService.getStudent(id)
-	    	      .orElseThrow(() -> new IllegalArgumentException("Invalid Student Id:" + id));
-		
+	    StudentDTO student = studentsService.getStudent(id);
+	    
 		ModelAndView mav = new ModelAndView("student-update", "student", student);
-		List<UserDTO> users = usersService.getUsers();
-		mav.addObject("userDTOs", users);
-
+		mav.addObject("users", usersService.getAllUsers());
         return mav;
     }
 	
 	@IsStudentsUpdate
     @GetMapping("/students/update/{id}")
-    public String update(@PathVariable("id") Integer id, 
-    		@ModelAttribute @Validated StudentDTO student, 
-    		BindingResult bindingResult, Model model) {
+    public String update(@PathVariable("id") Integer id, @ModelAttribute @Validated StudentDTO student, BindingResult bindingResult, Model model) {
 		
         if (bindingResult.hasErrors()) {
-        
+        	
         	student.setId(id);
+        	model.addAttribute("users", usersService.getAllUsers());
             return "student-update";
         } else {
         	
-        	student.setId(id);
         	studentsService.save(student);
             return "redirect:/students";
         }

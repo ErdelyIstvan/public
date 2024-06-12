@@ -1,0 +1,22 @@
+<!doctype html>
+<html th:replace="~{layouts/main :: layout(~{::main})}" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<main role="main">
+    <div class="jumbotron">
+		<div class="container">
+	        <div class="row">
+	            <div class="col-md-12 py-4">
+	                <h2>Eligible Elective Courses</h2>
+	
+	                <div th:replace="fragments/eligibleelectiveCourseList :: eligibleelectiveCourseList"></div>
+	
+	            </div>
+	        </div>
+	    </div>
+    </div>
+</main>
+
+</body>
+
+</html>

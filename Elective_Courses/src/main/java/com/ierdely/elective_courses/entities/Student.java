@@ -1,5 +1,6 @@
 package com.ierdely.elective_courses.entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -24,121 +25,28 @@ public class Student {
 	@GeneratedValue(strategy = GenerationType.AUTO )
 	private Integer id;
 	
-	@NotBlank(message="First name can not be blank.")
-    @Pattern(regexp = "[A-Za-z ]*", message = "First name contains illegal characters")
-	private String firstName;
-	
-	@NotBlank(message="Surname can not be blank.")
-    @Pattern(regexp = "[A-Za-z ]*", message = "Surname contains illegal characters")
-	private String surname;
-	
-	@Min(value = 1, message = "Grade has to greater or equal than 1.")
-	@Max(value = 10, message = "Grade has to be smaller or equal than 10.")
-	private float grade;
-	
-	@Min(value = 1, message = "'Year of study' has to be greater than or equal to 1.")
-	@Max(value = 5, message = "'Year of study' has to be smaller than or equal to 5.")
-	private byte studyYear;
-	
-	@Pattern(regexp = "[A-Za-z ]*", message = "Faculty Section contains illegal characters")
-	private String facultySection;
-	
-	@NotNull
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name ="user_id")
-	private User user;
-	
-	public Student() {
-		
-	}
-	
-	public Student(StudentDTO studentDTO) {
-		this.id = studentDTO.getId();
-		this.firstName = studentDTO.getFirstName();
-		this.surname = studentDTO.getSurname();
-		this.grade = studentDTO.getGrade();
-		this.studyYear = studentDTO.getStudyYear();
-		this.facultySection = studentDTO.getFacultySection();
-		this.user = new User(studentDTO.getUserDTO());
-	}
-	
-	public void copyFrom(StudentDTO studentDTO) {
-		this.firstName = studentDTO.getFirstName();
-		this.surname = studentDTO.getSurname();
-		this.grade = studentDTO.getGrade();
-		this.studyYear = studentDTO.getStudyYear();
-		this.facultySection = studentDTO.getFacultySection();
-		this.user = new User(studentDTO.getUserDTO());
-	}
-	
-	public Integer getId() {
-		
-		return id;
-	}
-	
-	public void setId(Integer id) {
-		
-		this.id = id;
-	}
-
-	public String getFirstName() {
-
-		return firstName;
-	}
-	
-	public void setFirstName(String firstName) {
-		
-		this.firstName = firstName;
-	}
-	
-	public String getSurname() {
-	
-		return surname;
-	}
-	
-	public void setSurname(String surname) {
-	
-		this.surname = surname;
-	}
-
-	public float getGrade() {
-		
-		return grade;
-	}
-
-	public void setGrade(float grade) {
-		
-		this.grade = grade;
-	}
-
-	public byte getStudyYear() {
-		
-		return studyYear;
-	}
-
-	public void setStudyYear(byte studyYear) {
-		
-		this.studyYear = studyYear;
-	}
-
-	public String getFacultySection() {
-		
-		return facultySection;
-	}
-
-	public void setFacultySection(String facultySection) {
-		
-		this.facultySection = facultySection;
-	}
-	
-	public User getUser() {
-		
-		return user;
-	}
-
-	public void setUser(User user) {
-		
-		this.user = user;
-	}
-
+//	@NotBlank(message="First name can not be blank.")
+//    @Pattern(regexp = "[A-Za-z ]*", message = "First name contains illegal characters")
+//	private String firstName;
+//	
+//	@NotBlank(message="Surname can not be blank.")
+//    @Pattern(regexp = "[A-Za-z ]*", message = "Surname contains illegal characters")
+//	private String surname;
+//	
+//	@Min(value = 1, message = "Grade has to greater or equal than 1.")
+//	@Max(value = 10, message = "Grade has to be smaller or equal than 10.")
+//	private float grade;
+//	
+//	@Min(value = 1, message = "'Year of study' has to be greater than or equal to 1.")
+//	@Max(value = 5, message = "'Year of study' has to be smaller than or equal to 5.")
+//	private byte studyYear;
+//	
+//	@Pattern(regexp = "[A-Za-z ]*", message = "Faculty Section contains illegal characters")
+//	private String facultySection;
+//	
+//	@NotNull
+//	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//	@JoinColumn(name ="user_id", referencedColumnName = "id")
+//	private User user;
+//	
 }

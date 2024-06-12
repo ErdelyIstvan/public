@@ -2,50 +2,76 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
 
 <body>
-	<form th:fragment="studentForm" method="post" action="#" th:action="@{/students/create}" th:object="${studentDTO}">
+	<form th:fragment="studentForm" method="post" action="#" th:action="@{/students/create}" th:object="${student}"  >
 
 		<div class="row">
-	        <div class="col-md-4 mb-3">
+			<div class="col-md-4 mb-3">
 			    <label for="firstName">First Name</label>
 			    <input type="text" class="form-control" id="firstName" th:field="*{firstName}"
 			           th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid'">
 			    <div class="invalid-feedback" th:errors="*{firstName}"></div>
 			</div>
-	        <div class="col-md-4 mb-3">
+			<div class="col-md-4 mb-3">
 			    <label for="surname">Surname</label>
 			    <input type="text" class="form-control" id="surname" th:field="*{surname}"
 			           th:classappend="${#fields.hasErrors('surname')} ? 'is-invalid'">
 			    <div class="invalid-feedback" th:errors="*{surname}"></div>
 			</div>
 			<div class="col-md-4 mb-3">
-			    <label for="userDTO">User</label>
-				<select th:field="*{userDTO}" class="form-control" id="userDTO" th:classappend="${#fields.hasErrors('userDTO')} ? 'is-invalid'"> 
-				   	<option th:each="userDTO:${userDTOs}" th:value="${userDTO}" th:text="${userDTO.username}"></option>
-				</select>   
-			    <div class="invalid-feedback" th:errors="*{userDTO}"></div>
-			</div>
-	    </div>
-
-	    <div class="row">
-	        <div class="col-md-4 mb-3">
-	            <label for="grade">Grade</label>
-	            <input type="number" class="form-control" id="grade" th:field="*{grade}"
-	                   th:classappend="${#fields.hasErrors('grade')} ? 'is-invalid'">
-	            <div class="invalid-feedback" th:errors="*{grade}"></div>
-	        </div>
-	        <div class="col-md-4 mb-3">
-	            <label for="studyYear">Year of Study</label>
-	            <input type="number" class="form-control" id="studyYear" th:field="*{studyYear}"
-	                   th:classappend="${#fields.hasErrors('studyYear')} ? 'is-invalid'">
-	            <div class="invalid-feedback" th:errors="*{studyYear}"></div>
-	        </div>
-			<div class="col-md-4 mb-3">
 			    <label for="facultySection">Faculty Section</label>
 			    <input type="text" class="form-control" id="facultySection" th:field="*{facultySection}"
 			           th:classappend="${#fields.hasErrors('facultySection')} ? 'is-invalid'">
 			    <div class="invalid-feedback" th:errors="*{facultySection}"></div>
 			</div>
+	        <div class="col-md-4 mb-3">
+				
+	            
+				<!-- Dropdown for User -->
+				<label for="userDto">User</label>
+				<select th:field="*{userDto}" class="form-control" id="userDto" th:classappend="${#fields.hasErrors('userDto')} ? 'is-invalid'">
+					<option value="">Select User</option>
+					<option th:each="userDto: ${userDtos}"
+						th:value="${userDto.username}"
+						th:text="${userDto.username}">Username
+					</option>
+				</select> 
+	            <div class="invalid-feedback" th:errors="*{userDto}"></div>		
+				
+							
+	        </div>
 	    </div>
+
+		<div class="row">
+			<div class="col-md-4 mb-3">
+			    <label for="grade">Grade</label>
+			    <input type="number" class="form-control" id="grade" th:field="*{grade}"
+			           th:classappend="${#fields.hasErrors('grade')} ? 'is-invalid'">
+			    <div class="invalid-feedback" th:errors="*{grade}"></div>
+			</div>
+			<div class="col-md-4 mb-3">
+			    <label for="studyYear">Year of Study</label>
+			    <input type="number" class="form-control" id="studyYear" th:field="*{studyYear}"
+			           th:classappend="${#fields.hasErrors('studyYear')} ? 'is-invalid'">
+			    <div class="invalid-feedback" th:errors="*{studyYear}"></div>
+			</div>
+
+		</div>
+		<!--
+		<div class="row">
+			<div class="col-md-4 mb-3">
+			    <label for="userDto.username">Username</label>
+			    <input type="text" class="form-control" id="userDto.username" th:field="*{userDto.username}"
+			           th:classappend="${#fields.hasErrors('userDto.username')} ? 'is-invalid'">
+			    <div class="invalid-feedback" th:errors="*{userDto.username}"></div>
+			</div>
+			<div class="col-md-4 mb-3">
+			    <label for="userDto.password">Password</label>
+			    <input type="password" class="form-control" id="userDto.password" th:field="*{userDto.password}"
+			           th:classappend="${#fields.hasErrors('userDto.password')} ? 'is-invalid'">
+			    <div class="invalid-feedback" th:errors="*{userDto.password}"></div>
+			</div>
+		</div>
+		-->
 
 		<div class="row">
 	        <div class="col-md-1">

@@ -23,19 +23,19 @@ public class ApplicationPropertiesService {
 		this.applicationPropertiesRepository = applicationPropertiesRepository;
 	}
 	
-	@Value("ec.min_mandatory_electives.1")
+	@Value("${ec.min_mandatory_electives.1}")
 	private String minimumElectivesForYear1;
 
-	@Value("ec.min_mandatory_electives.2")
+	@Value("${ec.min_mandatory_electives.2}")
 	private String minimumElectivesForYear2;
 
-	@Value("ec.min_mandatory_electives.3")
+	@Value("${ec.min_mandatory_electives.3}")
 	private String minimumElectivesForYear3;
 
-	@Value("ec.min_mandatory_electives.4")
+	@Value("${ec.min_mandatory_electives.4}")
 	private String minimumElectivesForYear4;
 
-	@Value("ec.min_mandatory_electives.5")
+	@Value("${ec.min_mandatory_electives.5}")
 	private String minimumElectivesForYear5;
 
 	public byte getMinimumElectivesForYear1() {

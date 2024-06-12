@@ -14,10 +14,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class ElectiveCourse {
 	
 	@Id
@@ -44,52 +46,5 @@ public class ElectiveCourse {
 	@JoinColumn(name = "teacher_id")
 	private Teacher teacher;
 	
-	public Integer getId() {
-		return id;
-	}
-	
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public byte getMaxAllowedStudents() {
-		return maxAllowedStudents;
-	}
-
-	public void setMaxAllowedStudents(byte maxAllowedStudents) {
-		this.maxAllowedStudents = maxAllowedStudents;
-	}
-
-	public byte getStudyYear() {
-		return studyYear;
-	}
-
-	public void setStudyYear(byte studyYear) {
-		this.studyYear = studyYear;
-	}
-
-	public CourseCategory getCategory() {
-		return category;
-	}
-
-	public void setCategory(CourseCategory category) {
-		this.category = category;
-	}
-
-	public Teacher getTeacher() {
-		return teacher;
-	}
-
-	public void setTeacher(Teacher teacher) {
-		this.teacher = teacher;
-	}
 	
 }

@@ -8,30 +8,77 @@
     <div class="row">
 		<div class="col-md-4 mb-3">
 		    <label for="id">Id</label>
-		    <output type="text" th:text="${user.id}" class="form-control" id="id" th:field="*{id}"
-		           th:classappend="${#fields.hasErrors('id')} ? 'is-invalid'">
+		    <output type="text" class="form-control" th:text="${id}" id="id" th:field="*{id}"
+			       th:classappend="${#fields.hasErrors('id')} ? 'is-invalid'">
+			<div class="invalid-feedback" th:errors="*{username}"></div>
 		    
 		</div>
+		<!--
 		<div class="col-md-4 mb-3">
 		    <label for="username">Username</label>
-		    <output type="text" class="form-control" id="username" th:field="*{username}"
+		    <output type="text" th:field="*{username}"
 		           th:text="*{username}">
 		</div>
+		-->
+		<div class="col-md-4 mb-3">
+		    <label for="username">Usernamee</label>
+		    <input type="text" class="form-control" id="username" th:field="*{username}"
+		           th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'">
+		    <div class="invalid-feedback" th:errors="*{username}"></div>
+		</div>
+		
+	</div>
+	<div class="row">
 		<div class="col-md-4 mb-3">
 		    <label for="password">Password</label>
 		    <input type="password" class="form-control" id="password" th:field="*{password}"
 		           th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'">
 		    <div class="invalid-feedback" th:errors="*{password}"></div>
 		</div>
-
 		<div class="col-md-4 mb-3">
-			<label>Roles      </label>
+			<label for="roles">Roles      </label>
 			<div th:each="role : ${allroles}">
-		        <input type="checkbox" th:field="*{roles}" th:value="${role.id}" />
+		        <input type="checkbox" th:field="*{roles}" th:value="${role.name}" 
+				/>
 		        <label th:for="${#ids.prev('roles')}" th:text="${role.name} + '  '"></label>
 		    </div>
+			<div class="invalid-feedback" th:errors="*{roles}"></div>
 		</div>
-			
+	</div>
+	<div class="row">
+		<div class="col-md-4 mb-3">
+		    <label for="firstName">First Name</label>
+		    <input type="text" class="form-control" id="firstName" th:field="*{firstName}"
+		           th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid'">
+		    <div class="invalid-feedback" th:errors="*{firstName}"></div>
+		</div>
+		<div class="col-md-4 mb-3">
+		    <label for="surname">Surname</label>
+		    <input type="text" class="form-control" id="surname" th:field="*{surname}"
+		           th:classappend="${#fields.hasErrors('surname')} ? 'is-invalid'">
+		    <div class="invalid-feedback" th:errors="*{surname}"></div>
+		</div>
+		<div class="col-md-4 mb-3">
+		    <label for="facultySection">Faculty Section</label>
+		    <input type="text" class="form-control" id="facultySection" th:field="*{facultySection}"
+		           th:classappend="${#fields.hasErrors('facultySection')} ? 'is-invalid'">
+		    <div class="invalid-feedback" th:errors="*{facultySection}"></div>
+		</div>
+	</div>	
+	<div class="row">
+		<div class="col-md-4 mb-3">
+		    <label for="grade">Grade</label>
+		    <input type="number" class="form-control" id="grade" th:field="*{grade}"
+		           th:classappend="${#fields.hasErrors('grade')} ? 'is-invalid'">
+		    <div class="invalid-feedback" th:errors="*{grade}"></div>
+		</div>
+		<div class="col-md-4 mb-3">
+		    <label for="studyYear">Year of Study</label>
+		    <input type="number" class="form-control" id="studyYear" th:field="*{studyYear}"
+		           th:classappend="${#fields.hasErrors('studyYear')} ? 'is-invalid'">
+		    <div class="invalid-feedback" th:errors="*{studyYear}"></div>
+		</div>
+
 	</div>
 
     <div class="row">
