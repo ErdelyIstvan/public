@@ -3,14 +3,13 @@
 
 <body>
 	<form th:fragment="courseCategoryForm" method="post" action="#" th:action="@{/coursecategories/create}" th:object="${courseCategory}">
-
 		<div class="row">
-	        <div class="col-md-4 mb-3">
-	            <label for="category">Category</label>
-	            <input type="text" class="form-control" id="category" th:field="*{category}"
-	                   th:classappend="${#fields.hasErrors('category')} ? 'is-invalid'">
-	            <div class="invalid-feedback" th:errors="*{category}"></div>
-	        </div>
+			<div class="col-md-4 mb-3">
+			    <label for="category">Category</label>
+			    <input type="text" class="form-control" id="category" th:field="*{category}"
+			           th:classappend="${#fields.hasErrors('category')} ? 'is-invalid'">
+			    <div class="invalid-feedback" th:errors="*{category}"></div>
+			</div>
 	    </div>
 
 	    <div class="row">
@@ -28,7 +27,7 @@
 	            <a href="#" th:href="@{/coursecategories}" class="btn btn-outline-secondary">Cancel</a>
 	        </div>
 	        <div class="col-md-2">
-	            <button class="btn btn-primary btn-block" type="submit">Add</button>
+	            <button th:if="${myCustomSecurity.isEnrollmentOpen()}" class="btn btn-primary btn-block" type="submit">Add</button>
 	        </div>
 	    </div>
 	</form>

@@ -36,8 +36,8 @@
 			<td th:text="${user.studyYear}"></td>
 			<td th:text="${user.facultySection}"></td>				
 			<td>	
-				<a sec:authorize="hasRole('ADMIN')" href="#" th:href="@{'/users/edit/'+${user.id}}" type="button" class="btn btn-primary">Edit</a>
-				<a sec:authorize="hasRole('ADMIN')" href="#" th:href="@{'/users/delete/'+${user.id}}" type="button" class="btn btn-outline-danger">Delete</a>
+				<a sec:authorize="hasRole('ADMIN')" th:if="${myCustomSecurity.isEnrollmentOpen()}" href="#" th:href="@{'/users/edit/'+${user.id}}" type="button" class="btn btn-primary">Edit</a>
+				<a sec:authorize="hasRole('ADMIN')" th:if="${myCustomSecurity.isEnrollmentOpen()}"  href="#" th:href="@{'/users/delete/'+${user.id}}" type="button" class="btn btn-outline-danger">Delete</a>
 			</td>
 		</tr>
 	

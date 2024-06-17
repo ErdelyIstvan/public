@@ -11,8 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ierdely.elective_courses.entities.ApplicationProperty;
 import com.ierdely.elective_courses.enums.ApplicationEnrollmentStatus;
-import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesRead;
-import com.ierdely.elective_courses.security.annotations.students.IsStudentsUpdate;
+import com.ierdely.elective_courses.security.annotations.IsAdmin;
 import com.ierdely.elective_courses.services.ApplicationPropertiesService;
 
 
@@ -22,7 +21,7 @@ public class StatusController {
 	@Autowired
 	private ApplicationPropertiesService apService;
 	
-	@IsElectiveCoursesRead
+	
 	@GetMapping("/status")
 	public ModelAndView index() {
 
@@ -34,7 +33,7 @@ public class StatusController {
 		return mav;
 	}
 	
-	@IsStudentsUpdate
+	@IsAdmin
     @GetMapping("/status/update/{key}")
     public String update(@PathVariable("key") String key, 
     		@ModelAttribute ApplicationProperty property, 

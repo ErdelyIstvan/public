@@ -11,7 +11,7 @@
 	
 	                <div th:replace="fragments/electiveCourseList :: electiveCourseList"></div>
 	
-	                <a href="#" th:href="@{/electivecourses/create}" type="button" class="btn btn-primary" sec:authorize="hasRole('ADMIN')">Add Elective Course</a>
+	                <a th:if="${myCustomSecurity.isEnrollmentOpen()}" href="#" th:href="@{/electivecourses/create}" type="button" class="btn btn-primary" sec:authorize="hasRole('ADMIN')">Add Elective Course</a>
 	            </div>
 	        </div>
 	    </div>

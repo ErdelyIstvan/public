@@ -6,10 +6,12 @@
    
 	<table th:fragment="enrollmentsList" class="table">
 	
+		
 		<tr>
 			<th>Id</th>
 			<th>Course</th>
 			<th>Student</th>
+			<th>Year of Study</th>
 			<th>Enrollment Date</th>
 			<th>Enrollment Status</th>
 			<th>Actions</th>
@@ -19,10 +21,11 @@
 			<td th:text="${enrollment.id}"></td>
 			<td th:text="${enrollment.course.title}"></td>
 			<td th:text="${enrollment.user.firstName} + ' ' + ${enrollment.user.surname}"></td>
+			<td th:text="${enrollment.yearOfStudy}"></td>
 			<td th:text="${enrollment.enrollmentDate}"></td>
 			<td th:text="${enrollment.enrollmentStatus}"></td>
 			<td>	
-				<a sec:authorize="hasRole('ADMIN')" href="#" th:href="@{'/enrollments/delete/'+${enrollment.id}}" type="button" class="btn btn-outline-danger">Delete</a>
+				<a sec:authorize="hasRole('ADMIN')" th:if="${myCustomSecurity.isEnrollmentOpen()}" href="#" th:href="@{'/enrollments/delete/'+${enrollment.id}}" type="button" class="btn btn-outline-danger">Delete</a>
 			</td>
 		</tr>
 	

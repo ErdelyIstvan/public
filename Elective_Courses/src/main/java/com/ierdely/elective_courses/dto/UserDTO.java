@@ -32,7 +32,7 @@ public class UserDTO {
     private Collection<RoleDTO> roles;
     
     @NotBlank(message="First name can not be blank.")
-    @Pattern(regexp = "[A-Za-z ]*", message = "First name contains illegal characters")
+    @Pattern(regexp = "[A-Za-z0-9 ]*", message = "First name contains illegal characters")
 	private String firstName;
 	
 	@NotBlank(message="Surname can not be blank.")
@@ -45,7 +45,7 @@ public class UserDTO {
 	
 	@Min(value = 1, message = "'Year of study' has to be greater than or equal to 1.")
 	@Max(value = 5, message = "'Year of study' has to be smaller than or equal to 5.")
-	private byte studyYear;
+	private Byte studyYear;
 	
 	@Pattern(regexp = "[A-Za-z ]*", message = "Faculty Section contains illegal characters")
 	private String facultySection;

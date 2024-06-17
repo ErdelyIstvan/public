@@ -1,15 +1,16 @@
 package com.ierdely.elective_courses.dto;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-class TeacherDTO {
+@AllArgsConstructor
+@NoArgsConstructor
+public class TeacherDTO {
 	
 	Integer id;
 	

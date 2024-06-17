@@ -11,7 +11,7 @@
 	
 	                <div th:replace="fragments/courseCategoryList :: courseCategoryList"></div>
 	
-	                <a href="#" th:href="@{/coursecategories/create}" type="button" class="btn btn-primary" sec:authorize="hasRole('ADMIN')">Add Course Category</a>
+	                <a th:if="${myCustomSecurity.isEnrollmentOpen()}" href="#" th:href="@{/coursecategories/create}" type="button" class="btn btn-primary" sec:authorize="hasRole('ADMIN')">Add Course Category</a>
 	            </div>
 	        </div>
 	    </div>

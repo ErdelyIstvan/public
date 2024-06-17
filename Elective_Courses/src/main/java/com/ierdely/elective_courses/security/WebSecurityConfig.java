@@ -3,7 +3,7 @@ package com.ierdely.elective_courses.security;
 import static com.ierdely.elective_courses.security.SecurityRoles.ADMIN;
 import static com.ierdely.elective_courses.security.SecurityRoles.COURSES_PAG_VIEW;
 import static com.ierdely.elective_courses.security.SecurityRoles.ENROLLMENTS_PAG_VIEW;
-import static com.ierdely.elective_courses.security.SecurityRoles.STUDENTS_PAG_VIEW;
+import static com.ierdely.elective_courses.security.SecurityRoles.USERS_PAG_VIEW;
 import static com.ierdely.elective_courses.security.SecurityRoles.TEACHERS_PAG_VIEW;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +46,10 @@ public class WebSecurityConfig {
         		.requestMatchers("/", "/home").permitAll()
         		.requestMatchers("/electivecourses/**").hasRole(COURSES_PAG_VIEW)
         		.requestMatchers("/coursecategories/**").hasRole(COURSES_PAG_VIEW)
-        		.requestMatchers("/students/**").hasRole(STUDENTS_PAG_VIEW)
+        		.requestMatchers("/students/**").hasRole(USERS_PAG_VIEW)
         		.requestMatchers("/teachers/**").hasRole(TEACHERS_PAG_VIEW)
         		.requestMatchers("/users/**").hasRole(ADMIN)
-        		.requestMatchers("/enrollments/**").hasRole(ENROLLMENTS_PAG_VIEW)
+        		.requestMatchers("/enrollments/**").hasRole(ENROLLMENTS_PAG_VIEW) 
         		.anyRequest().authenticated()
         	).formLogin( formLogin -> formLogin
             	.loginPage("/login")

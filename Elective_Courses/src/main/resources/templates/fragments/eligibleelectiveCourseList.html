@@ -40,8 +40,9 @@ xmlns:th="http://www.thymeleaf.org/">
 			<td th:text="${course.course.category.getCategory()}"></td>
 			<td>	
 				
-				<a th:if="${course.currentUserEnrollment == null}" href="#" th:href="@{'/electivecourses/enroll/'+${course.course.id}}" type="button" class="btn btn-primary">Enroll</a>
-				<a th:if="${course.currentUserEnrollment != null}" href="#" th:href="@{'/electivecourses/withdrawn/'+${course.currentUserEnrollment.id}}" type="button" class="btn btn-primary">Withdrawn</a>
+				<a th:if="${course.currentUserEnrollment != null and !myCustomSecurity.isEnrollmentOpen()}" type="text">Enrolled</a>
+				<a th:if="${course.currentUserEnrollment == null and myCustomSecurity.isEnrollmentOpen()}" href="#" th:href="@{'/electivecourses/enroll/'+${course.course.id}}" type="button" class="btn btn-primary">Enroll</a>
+				<a th:if="${course.currentUserEnrollment != null and myCustomSecurity.isEnrollmentOpen()}" href="#" th:href="@{'/electivecourses/withdrawn/'+${course.currentUserEnrollment.id}}" type="button" class="btn btn-primary">Withdrawn</a>
 			
 			</td>
 		</tr>

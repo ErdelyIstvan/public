@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,45 +20,50 @@ import com.ierdely.elective_courses.dto.ElectiveCourseDTO;
 import com.ierdely.elective_courses.dto.EligibleCoursesDTO;
 import com.ierdely.elective_courses.dto.EnrollmentDTO;
 import com.ierdely.elective_courses.dto.UserDTO;
-
 import com.ierdely.elective_courses.enums.CourseEnrollmentStatus;
-import com.ierdely.elective_courses.repositories.CourseCategoriesRepository;
-import com.ierdely.elective_courses.repositories.ElectiveCoursesRepository;
-import com.ierdely.elective_courses.repositories.TeachersRepository;
+import com.ierdely.elective_courses.security.CustomSecurityExpression;
 import com.ierdely.elective_courses.security.annotations.IsStudent;
 import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesCreate;
 import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesDelete;
 import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesRead;
 import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesUpdate;
+import com.ierdely.elective_courses.security.annotations.enrollments.IsEnrollmentsCreate;
+import com.ierdely.elective_courses.security.annotations.enrollments.IsEnrollmentsDelete;
+import com.ierdely.elective_courses.services.CourseCategoriesService;
 import com.ierdely.elective_courses.services.ECUsersDetailedService;
 import com.ierdely.elective_courses.services.ElectiveCoursesService;
 import com.ierdely.elective_courses.services.EnrollmentService;
+import com.ierdely.elective_courses.services.TeachersService;
 
 @Controller
 public class ElectiveCoursesController {
 	
 	private ElectiveCoursesService coursesService;
 
-	private CourseCategoriesRepository categoriesRepository;
+	private CourseCategoriesService categoriesService;
 	
-	private TeachersRepository teachersRepository;
+	private TeachersService teachersService;
 	
 	private ECUsersDetailedService usersService;
 	
 	private EnrollmentService enrollmentService;
 	
+	private CustomSecurityExpression myCustomSecurityExpression;
+	
 	@Autowired
 	public ElectiveCoursesController(ElectiveCoursesService coursesService, 
-			CourseCategoriesRepository categoryRepository,
-			TeachersRepository teachersRepository,
+			CourseCategoriesService courseCategoriesService,
+			TeachersService teachersService,
 			ECUsersDetailedService usersService,
-			EnrollmentService enrollmentService) {
+			EnrollmentService enrollmentService,
+			CustomSecurityExpression customSecurityExpression) {
 		
 		this.coursesService = coursesService;
-		this.categoriesRepository = categoryRepository;
-		this.teachersRepository = teachersRepository;
+		this.categoriesService = courseCategoriesService;
+		this.teachersService = teachersService;
 		this.usersService = usersService;
 		this.enrollmentService = enrollmentService;
+		this.myCustomSecurityExpression = customSecurityExpression;
 	}
 	
 	@IsElectiveCoursesRead
@@ -67,6 +73,7 @@ public class ElectiveCoursesController {
 		List<ElectiveCourseDTO> courses = coursesService.getAllElectiveCourses();
 		ModelAndView mav = new ModelAndView("electivecourses");
 		mav.addObject("electivecourses", courses);
+		mav.addObject("myCustomSecurity", myCustomSecurityExpression);
 		return mav;
 	}
 	
@@ -79,6 +86,7 @@ public class ElectiveCoursesController {
 		EligibleCoursesDTO data = coursesService.getEligibleCoursesData(loggedInUser);
 		ModelAndView mav = new ModelAndView("eligibleelectivecourses");
 		mav.addObject("data", data);
+		mav.addObject("myCustomSecurity", myCustomSecurityExpression);
 		return mav;
 	}
 	
@@ -92,21 +100,37 @@ public class ElectiveCoursesController {
         return "redirect:/electivecourses";
     }
 	
-	@IsStudent
+	@IsEnrollmentsCreate
+	@PreAuthorize("@myCustomSecurity.isEnrollmentOpen()")
     @GetMapping("/electivecourses/enroll/{id}")
     public String enroll(@PathVariable("id") Integer id, Principal principal) {
 		
 		UserDTO loggedInUser = usersService.getUser(principal.getName());
 		ElectiveCourseDTO electiveCourseDTO = coursesService.getElecticeCourse(id);
 		LocalDate date = LocalDate.now();
-		EnrollmentDTO enrollment = new EnrollmentDTO(null, electiveCourseDTO, loggedInUser, date, CourseEnrollmentStatus.PREFERENCE);
+		EnrollmentDTO enrollment = new EnrollmentDTO(null, electiveCourseDTO, loggedInUser, loggedInUser.getStudyYear(), date, CourseEnrollmentStatus.PREFERENCE);
         enrollmentService.saveEnrollment(enrollment);
         return "redirect:/eligibleelectivecourses";
     
     }
 	
+	@IsEnrollmentsCreate
+	@PreAuthorize("@myCustomSecurity.isEnrollmentOpen()")
+    @GetMapping("/electivecourses/enroll-alternative/{id}")
+    public String enrollAlternative(@PathVariable("id") Integer id, Principal principal) {
+		
+		UserDTO loggedInUser = usersService.getUser(principal.getName());
+		ElectiveCourseDTO electiveCourseDTO = coursesService.getElecticeCourse(id);
+		LocalDate date = LocalDate.now();
+		EnrollmentDTO enrollment = new EnrollmentDTO(null, electiveCourseDTO, loggedInUser, loggedInUser.getStudyYear(), date, CourseEnrollmentStatus.ALTERNATIVE_PREFERENCE);
+        enrollmentService.saveEnrollment(enrollment);
+        return "redirect:/eligibleelectivecourses";
+    
+    }
 	
-	@IsStudent
+    //@PreAuthorize("@myCustomSecurity.checkEnrollmentStatus()")
+    @IsEnrollmentsDelete
+	@PreAuthorize("@myCustomSecurity.isEnrollmentOpen()")
     @GetMapping("/electivecourses/withdrawn/{id}")
     public String withdrawn(@PathVariable("id") Integer id, Principal principal) {
 		
@@ -120,21 +144,21 @@ public class ElectiveCoursesController {
     public ModelAndView create() {
 		
 		ModelAndView mav = new ModelAndView("electivecourse-create", "electiveCourse", new ElectiveCourseDTO());
-		mav.addObject("categories", categoriesRepository.findAll());
-		mav.addObject("teachers", teachersRepository.findAll());
+		mav.addObject("categories", categoriesService.getAllCourseCategories());
+		mav.addObject("teachers", teachersService.getAllTeachers());
         return mav;
     }
 	
 	@IsElectiveCoursesCreate
     @PostMapping("/electivecourses/create")
-    public String create(@ModelAttribute @Validated ElectiveCourseDTO newElectiveCourse, BindingResult bindingResult, Model model) {
+    public String create(@ModelAttribute @Validated ElectiveCourseDTO electiveCourse, BindingResult bindingResult, Model model) {
 		
         if (bindingResult.hasErrors()) {
-        	model.addAttribute("categories", categoriesRepository.findAll());
-    		model.addAttribute("teachers", teachersRepository.findAll());
+        	model.addAttribute("categories", categoriesService.getAllCourseCategories());
+    		model.addAttribute("teachers", teachersService.getAllTeachers());
             return "electivecourse-create";
         } else {
-        	coursesService.saveElectiveCourse(newElectiveCourse);
+        	coursesService.saveElectiveCourse(electiveCourse);
             return "redirect:/electivecourses";
         }
         
@@ -147,8 +171,8 @@ public class ElectiveCoursesController {
 		ElectiveCourseDTO userelectiveCourse = coursesService.getElecticeCourse(id);
 	    
 		ModelAndView mav = new ModelAndView("electivecourse-update", "electiveCourse", userelectiveCourse);
-		mav.addObject("categories", categoriesRepository.findAll());
-		mav.addObject("teachers", teachersRepository.findAll());
+		mav.addObject("categories", categoriesService.getAllCourseCategories());
+		mav.addObject("teachers", teachersService.getAllTeachers());
         return mav;
     }
 	
@@ -159,8 +183,8 @@ public class ElectiveCoursesController {
         if (bindingResult.hasErrors()) {
         	
         	electiveCourse.setId(id);
-        	model.addAttribute("categories", categoriesRepository.findAll());
-    		model.addAttribute("teachers", teachersRepository.findAll());
+        	model.addAttribute("categories", categoriesService.getAllCourseCategories());
+    		model.addAttribute("teachers", teachersService.getAllTeachers());
             return "electivecourse-update";
         } else {
         	

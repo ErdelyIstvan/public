@@ -23,6 +23,11 @@ import com.ierdely.elective_courses.entities.Role;
 import com.ierdely.elective_courses.entities.User;
 import com.ierdely.elective_courses.repositories.RolesRepository;
 import com.ierdely.elective_courses.repositories.UsersRepository;
+import com.ierdely.elective_courses.security.annotations.users.IsUsersCreate;
+import com.ierdely.elective_courses.security.annotations.users.IsUsersDelete;
+import com.ierdely.elective_courses.security.annotations.users.IsUsersRead;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 @Transactional
@@ -38,9 +43,6 @@ public class ECUsersDetailedService implements UserDetailsService {
     private BCryptPasswordEncoder passwordEncoder;
     
     private ModelMapper modelMapper;
-	
-	//@Autowired
-    //private IUserService service;
 	
 	@Autowired //not needed, it is the only constructor, Spring does the autowireing anyway
 	public ECUsersDetailedService(BCryptPasswordEncoder passwordEncoder, 
@@ -67,21 +69,6 @@ public class ECUsersDetailedService implements UserDetailsService {
                 user.getUsername(), user.getPassword(), true, true, true, 
                 true, getAuthorities(user.getRoles()));
     }
-	
-//	@Override
-//    public UserDetails loadUserByUsername(String email)
-//      throws UsernameNotFoundException {
-// 
-//        User user = userRepository.findByEmail(email);
-//        if (user == null) {
-//            return new org.springframework.security.core.userdetails.User(
-//              " ", " ", true, true, true, true, 
-//              getAuthorities(Arrays.asList(
-//                roleRepository.findByName("ROLE_USER"))));
-//        }
-//
-//        return 
-//    }
 
     private Collection<? extends GrantedAuthority> getAuthorities(
       Collection<Role> roles) {
@@ -107,18 +94,8 @@ public class ECUsersDetailedService implements UserDetailsService {
         }
         return authorities;
     }
-
 	
-//	public Optional<User> getUser(Student student) {
-//		
-//		if (student == null) {
-//		
-//			throw new IllegalArgumentException("Can not ask for the user of a null student object.");
-//		}
-//		
-//		return usersRepository.findByStudent(student);
-//	}
-	
+    @IsUsersRead
 	public Optional<UserDTO> getUser(Long id) {
 		Optional<User> opUser = usersRepository.findById(id);
 		if(opUser.isEmpty()) {
@@ -127,28 +104,41 @@ public class ECUsersDetailedService implements UserDetailsService {
 		return Optional.of(modelMapper.map(opUser.get(), UserDTO.class));
 	}
 	
+    @IsUsersRead
 	public UserDTO getUser(String username) {
 		
 		return modelMapper.map(usersRepository.findByUsername(username), UserDTO.class);
 	}
 	
+	@IsUsersDelete
 	public void deleteUserById(Long id) {
 		
-		usersRepository.deleteById(id);
+		User persistentUser = usersRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException("User entity with id: " + id + " not found."));
+		
+		usersRepository.delete(persistentUser);
 	}
 	
+	
+	@IsUsersCreate
 	public User saveUser(User user) {
 		
 		return usersRepository.save(user);
 	}
 	
+	@IsUsersRead
 	public List<UserDTO> getAllUsers() {
 		
 		return usersRepository.findAll().stream().map(user -> modelMapper.map(user, UserDTO.class))
 				.collect(Collectors.toList());
 	}
 	
-
+	@IsUsersRead
+	public List<UserDTO> getAllStudentUsers() {
+		
+		return usersRepository.findAllByRolesContaining(rolesRepository.findByName("ROLE_STUDENT")).stream().map(user -> modelMapper.map(user, UserDTO.class))
+				.collect(Collectors.toList());
+	}
 	
 	public List<RoleDTO> getAllRoles() {
 		
@@ -161,6 +151,7 @@ public class ECUsersDetailedService implements UserDetailsService {
 		return modelMapper.map(rolesRepository.findByName(roleName), RoleDTO.class);
 	}
 
+	@IsUsersCreate
 	public User saveUserAccount(UserDTO inputUser) throws RuntimeException {
 
 		String iPass = inputUser.getPassword();

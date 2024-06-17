@@ -7,13 +7,39 @@
 	    <div class="container">
 	        <div class="row">
 	            <div class="col-md-12 py-4">
-	                <h2 >Enrollments
-						
-	                <a href="#" th:href="@{/enrollments/create}"  type="button" class="btn btn-primary" sec:authorize="hasRole('ADMIN')">Add Enrollment</a>
-					</h2>
+	                <h2 >Enrollments</h2>
+					<br>
+					<form th:action="@{/enrollments}" method="get">
+					    <label for="year">Filter by Year:</label>
+					    <select id="year" name="year">
+				        	<option value="0">Select a Year</option>
+							<option value="1">Year 1</option>
+					        <option value="2">Year 2</option>
+							<option value="3">Year 3</option>
+							<option value="4">Year 4</option>
+							<option value="5">Year 5</option>
+					    </select>
+
+					    <label for="courseID">Filter by Elective Course:</label>
+						<select name="courseID" id="courseID"> 
+							<option value="">Select a Course</option>
+							<option th:each="course:${courses}" th:value="${course.id}" th:text="${course.title}"></option>
+						</select>   
+								       
+						<label for="userID">Filter by Student:</label>
+						<select id="userID" name="userID"> 
+							<option value="">Select a Student</option>
+							<option th:each="user:${users}" th:value="${user.id}" th:text="${user.firstName + ' ' + user.surname}"></option>
+						</select> 
+					         <br>
+					    <button type="submit" align="right">Apply Filters</button>
+						<br> <br> 
+					</form>	
 	               <div th:replace="fragments/enrollmentsList :: enrollmentsList"></div>
 	
 	            </div>
+				<a href="#" th:href="@{/enrollments/generate}"  type="button" class="btn btn-primary" sec:authorize="hasRole('ADMIN')" th:if="${myCustomSecurity.isEnrollmentOpen()}">Generate Initial enrollments</a>
+				<a href="#" th:href="@{/enrollments/create}"  type="button" class="btn btn-primary" sec:authorize="hasRole('ADMIN')" th:if="${myCustomSecurity.isEnrollmentOpen()}">Add Enrollment</a>
 	        </div>
 	    </div>
 	</div>

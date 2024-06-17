@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+	<form th:action="@{/enrollments}" method="get">
+	    <label for="year">Filter by Year:</label>
+	    <select id="year" name="year">
+	    	<option value="0">Select a Year</option>
+			<option value="1">Year 1</option>
+	        <option value="2">Year 2</option>
+			<option value="3">Year 3</option>
+			<option value="4">Year 4</option>
+			<option value="5">Year 5</option>
+	    </select>
+
+	    <label for="courseID">Filter by Elective Course:</label>
+		<select name="courseID" id="courseID"> 
+			<option value="">Select a Course</option>
+			<option th:each="course:${courses}" th:value="${course.id}" th:text="${course.title}"></option>
+		</select>   
+				       
+		<label for="userID">Filter by Student:</label>
+		<select id="userID" name="userID"> 
+			<option value="">Select a Student</option>
+			<option th:each="user:${users}" th:value="${user.id}" th:text="${user.firstName + ' ' + user.surname}"></option>
+		</select> 
+	         <br>
+	    <button type="submit" align="right">Apply Filters</button>
+		<br> <br> 
+	</form>		
+	
+<form th:fragment="teacherForm" method="post" action="#" th:action="@{/enrollments/create}"
+      th:object="${teacher}">
+	  
+    
+    <div class="row">
+		<div class="col-md-1">
+		    <a href="#" th:href="@{/teachers}" class="btn btn-outline-secondary">Cancel</a>
+		</div>
+        <div class="col-md-2">
+            <button class="btn btn-primary btn-block" type="submit">Add</button>
+        </div>
+    </div>
+</form>
+
+</body>
+</html>

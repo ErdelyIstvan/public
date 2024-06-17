@@ -22,8 +22,8 @@
 			<td th:text="${category.category}"></td>
 			<td th:text="${category.description}"></td>
 			<td>	
-				<a sec:authorize="hasRole('ADMIN')" href="#" th:href="@{'/coursecategories/edit/'+${category.category}}" type="button" class="btn btn-primary" >Edit</a>
-				<a sec:authorize="hasRole('ADMIN')" href="#" th:href="@{'/coursecategories/delete/'+${category.category}}" type="button" class="btn btn-outline-danger">Delete</a>
+				<a th:if="${myCustomSecurity.isEnrollmentOpen()}" sec:authorize="hasRole('ADMIN')" href="#" th:href="@{'/coursecategories/edit/'+${category.category}}" type="button" class="btn btn-primary" >Edit</a>
+				<a th:if="${myCustomSecurity.isEnrollmentOpen()}" sec:authorize="hasRole('ADMIN')" href="#" th:href="@{'/coursecategories/delete/'+${category.category}}" type="button" class="btn btn-outline-danger">Delete</a>
 			</td>
 		</tr>
 	

@@ -13,14 +13,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ierdely.elective_courses.dto.ElectiveCourseDTO;
 import com.ierdely.elective_courses.dto.EnrollmentDTO;
-import com.ierdely.elective_courses.dto.RoleDTO;
 import com.ierdely.elective_courses.dto.UserDTO;
-import com.ierdely.elective_courses.entities.CourseCategory;
 import com.ierdely.elective_courses.entities.ElectiveCourse;
 import com.ierdely.elective_courses.entities.Enrollment;
-import com.ierdely.elective_courses.entities.Teacher;
 import com.ierdely.elective_courses.entities.User;
+import com.ierdely.elective_courses.repositories.ElectiveCoursesRepository;
 import com.ierdely.elective_courses.repositories.EnrollmentsRepository;
+import com.ierdely.elective_courses.repositories.UsersRepository;
+import com.ierdely.elective_courses.security.annotations.enrollments.IsEnrollmentsCreate;
+import com.ierdely.elective_courses.security.annotations.enrollments.IsEnrollmentsDelete;
+import com.ierdely.elective_courses.security.annotations.enrollments.IsEnrollmentsUpdate;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -29,22 +31,64 @@ public class EnrollmentService {
 
 	private EnrollmentsRepository enrollmentsRepository;
 	
+	private ElectiveCoursesRepository electiveCoursesRepository;
+	
+	private UsersRepository usersRepository;
+	
 	private ModelMapper modelMapper;
 	
 	@Autowired
-	public EnrollmentService(EnrollmentsRepository enrollmentsRepository, ModelMapper modelMapper) {
+	public EnrollmentService(EnrollmentsRepository enrollmentsRepository, 
+			ElectiveCoursesRepository electiveCoursesRepository,
+			UsersRepository usersRepository,
+			ModelMapper modelMapper) {
+		
 		this.enrollmentsRepository = enrollmentsRepository;
+		this.electiveCoursesRepository = electiveCoursesRepository;
+		this.usersRepository = usersRepository;
 		this.modelMapper = modelMapper;
 	}
 	
-	List<EnrollmentDTO> getEnrollments(UserDTO userDTO) {
+	public List<EnrollmentDTO> getEnrollments(UserDTO userDTO) {
 		return enrollmentsRepository.findByUser(modelMapper.map(userDTO, User.class))
 				.stream().map(enrollment -> modelMapper.map(enrollment, EnrollmentDTO.class))
 				.collect(Collectors.toList());
 		
 	}
-	List<EnrollmentDTO> getEnrollments(ElectiveCourseDTO courseDTO) {
+	public List<EnrollmentDTO> getEnrollments(ElectiveCourseDTO courseDTO) {
 		return enrollmentsRepository.findByCourse(modelMapper.map(courseDTO, ElectiveCourse.class))
+				.stream().map(enrollment -> modelMapper.map(enrollment, EnrollmentDTO.class))
+				.collect(Collectors.toList());	
+	}
+	
+	public List<EnrollmentDTO> getEnrollments(Integer courseId, Integer userID, Byte year) {
+		User persistentUser = null;
+		if (userID != null) {
+			persistentUser = usersRepository.findById(userID)
+					.orElseThrow(() -> new EntityNotFoundException("User entity with id: " + userID + " not found."));
+		}
+		ElectiveCourse persistenCourse = null;
+		if (courseId != null) {
+			persistenCourse = electiveCoursesRepository.findById(courseId)
+					.orElseThrow(() -> new EntityNotFoundException("UElective Course entity with id: " + courseId + " not found."));
+		}
+		return enrollmentsRepository.findByCourseAndUserAndYearOfStudy(persistenCourse, persistentUser, year)
+				.stream().map(enrollment -> modelMapper.map(enrollment, EnrollmentDTO.class))
+				.collect(Collectors.toList());	
+	}
+	
+	public List<EnrollmentDTO> getEnrollments(Integer courseId, Integer userID) {
+		User persistentUser = null;
+		if (userID != null) {
+			persistentUser = usersRepository.findById(userID)
+					.orElseThrow(() -> new EntityNotFoundException("User entity with id: " + userID + " not found."));
+		}
+		ElectiveCourse persistenCourse = null;
+		if (courseId != null) {
+			persistenCourse = electiveCoursesRepository.findById(courseId)
+					.orElseThrow(() -> new EntityNotFoundException("UElective Course entity with id: " + courseId + " not found."));
+		}
+		return enrollmentsRepository.findByCourseAndUser(persistenCourse, persistentUser)
 				.stream().map(enrollment -> modelMapper.map(enrollment, EnrollmentDTO.class))
 				.collect(Collectors.toList());	
 	}
@@ -79,6 +123,7 @@ public class EnrollmentService {
 				.collect(Collectors.toList());
 	}
 	
+	@IsEnrollmentsCreate
 	public EnrollmentDTO saveEnrollment(EnrollmentDTO enrollmentDTO) {
 		
 		Enrollment enrollmentToSave = modelMapper.map(enrollmentDTO, Enrollment.class);
@@ -95,8 +140,9 @@ public class EnrollmentService {
 				savedEnrollment, EnrollmentDTO.class);
 	}
 	
+	@IsEnrollmentsUpdate
 	@Transactional
-	public EnrollmentDTO updateElectiveCourse(Integer id, EnrollmentDTO enrollmentDTO) {
+	public EnrollmentDTO updateEnrollment(Integer id, EnrollmentDTO enrollmentDTO) {
 
 		Enrollment persistentEnrollment = enrollmentsRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Enrollment entity with id: " + id + " not found."));
@@ -109,6 +155,7 @@ public class EnrollmentService {
 		return modelMapper.map(enrollmentsRepository.save(persistentEnrollment), EnrollmentDTO.class);
 	}
 	
+	@IsEnrollmentsDelete
 	public void deleteEnrollment(Integer id) {
 
 		Enrollment persistentEnrollment = enrollmentsRepository.findById(id)

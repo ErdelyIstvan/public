@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
+
+<body>
+	
+    <div class="row">
+        <div class="col-md-4" th:if="${users.isEmpty()}">
+            <div class="alert alert-warning" role="alert">
+                No USER defined yet.
+            </div>
+        </div>
+	</div>
+	<table th:fragment="pearsList" class="table">
+	
+		<tr>
+			<th>Id</th>
+			<th>First Name</th>
+			<th>Surname</th>
+			<th>Grade</th>
+			<th>Year of study</th>
+			<th>Section</th>
+		</tr>
+		
+		<tr th:each="user:${pears}">
+			<td th:text="${user.id}"></td>
+			<td th:text="${user.firstName}"></td>
+			<td th:text="${user.surname}"></td>
+			<td th:text="${user.grade}"></td>
+			<td th:text="${user.studyYear}"></td>
+			<td th:text="${user.facultySection}"></td>				
+		</tr>
+	
+	</table>
+</body>
+</html>

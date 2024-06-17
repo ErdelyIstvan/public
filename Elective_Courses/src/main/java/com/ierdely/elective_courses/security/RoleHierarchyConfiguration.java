@@ -14,12 +14,12 @@ import static com.ierdely.elective_courses.security.SecurityRoles.ENROLLMENTS_PA
 import static com.ierdely.elective_courses.security.SecurityRoles.ENROLLMENTS_READ;
 import static com.ierdely.elective_courses.security.SecurityRoles.ENROLLMENTS_UPDATE;
 import static com.ierdely.elective_courses.security.SecurityRoles.STUDENT;
-import static com.ierdely.elective_courses.security.SecurityRoles.STUDENTS_ADMIN;
-import static com.ierdely.elective_courses.security.SecurityRoles.STUDENTS_CREATE;
-import static com.ierdely.elective_courses.security.SecurityRoles.STUDENTS_DELETE;
-import static com.ierdely.elective_courses.security.SecurityRoles.STUDENTS_PAG_VIEW;
-import static com.ierdely.elective_courses.security.SecurityRoles.STUDENTS_READ;
-import static com.ierdely.elective_courses.security.SecurityRoles.STUDENTS_UPDATE;
+import static com.ierdely.elective_courses.security.SecurityRoles.USERS_ADMIN;
+import static com.ierdely.elective_courses.security.SecurityRoles.USERS_CREATE;
+import static com.ierdely.elective_courses.security.SecurityRoles.USERS_DELETE;
+import static com.ierdely.elective_courses.security.SecurityRoles.USERS_PAG_VIEW;
+import static com.ierdely.elective_courses.security.SecurityRoles.USERS_READ;
+import static com.ierdely.elective_courses.security.SecurityRoles.USERS_UPDATE;
 import static com.ierdely.elective_courses.security.SecurityRoles.TEACHERS_ADMIN;
 import static com.ierdely.elective_courses.security.SecurityRoles.TEACHERS_CREATE;
 import static com.ierdely.elective_courses.security.SecurityRoles.TEACHERS_DELETE;
@@ -48,12 +48,12 @@ public class RoleHierarchyConfiguration {
         .append(COURSES_ADMIN, COURSES_DELETE)
         .append(COURSES_ADMIN, COURSES_PAG_VIEW)
 
-        .append(ADMIN, STUDENTS_ADMIN)
-        .append(STUDENTS_ADMIN, STUDENTS_CREATE)
-        .append(STUDENTS_ADMIN, STUDENTS_READ)
-        .append(STUDENTS_ADMIN, STUDENTS_UPDATE)
-        .append(STUDENTS_ADMIN, STUDENTS_DELETE)
-        .append(STUDENTS_ADMIN, STUDENTS_PAG_VIEW)
+        .append(ADMIN, USERS_ADMIN)
+        .append(USERS_ADMIN, USERS_CREATE)
+        .append(USERS_ADMIN, USERS_READ)
+        .append(USERS_ADMIN, USERS_UPDATE)
+        .append(USERS_ADMIN, USERS_DELETE)
+        .append(USERS_ADMIN, USERS_PAG_VIEW)
         
         .append(ADMIN, TEACHERS_ADMIN)
         .append(TEACHERS_ADMIN, TEACHERS_CREATE)
@@ -69,10 +69,10 @@ public class RoleHierarchyConfiguration {
         .append(ENROLLMENTS_ADMIN, ENROLLMENTS_DELETE)
         .append(ENROLLMENTS_ADMIN, ENROLLMENTS_PAG_VIEW)
 
-        .append(STUDENT, STUDENTS_READ)
+        .append(STUDENT, USERS_READ)
         .append(STUDENT, COURSES_READ)
         .append(STUDENT, COURSES_PAG_VIEW)
-        .append(STUDENT, STUDENTS_PAG_VIEW)
+        .append(STUDENT, USERS_PAG_VIEW)
         .append(STUDENT, ENROLLMENTS_PAG_VIEW)
         .append(STUDENT, ENROLLMENTS_CREATE)
         .append(STUDENT, ENROLLMENTS_READ)

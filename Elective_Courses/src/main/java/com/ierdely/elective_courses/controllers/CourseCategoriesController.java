@@ -13,26 +13,31 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ierdely.elective_courses.entities.CourseCategory;
-import com.ierdely.elective_courses.repositories.CourseCategoriesRepository;
+import com.ierdely.elective_courses.dto.CourseCategoryDTO;
+import com.ierdely.elective_courses.security.CustomSecurityExpression;
 import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesCreate;
 import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesDelete;
 import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesRead;
 import com.ierdely.elective_courses.security.annotations.electivecourses.IsElectiveCoursesUpdate;
+import com.ierdely.elective_courses.services.CourseCategoriesService;
 
 @Controller
 public class CourseCategoriesController {
 	
 	@Autowired
-	private CourseCategoriesRepository courseCategoriesRepository;
+	private CourseCategoriesService courseCategoriesService;
+	
+	@Autowired
+	CustomSecurityExpression myCustomSecurity;
 	
 	@IsElectiveCoursesRead
 	@GetMapping("/coursecategories")
 	public ModelAndView index() {
 
-		List<CourseCategory> courses = courseCategoriesRepository.findAll();
+		List<CourseCategoryDTO> courses = courseCategoriesService.getAllCourseCategories();
 		ModelAndView mav = new ModelAndView("coursecategories");
 		mav.addObject("coursecategories", courses);
+		mav.addObject("myCustomSecurity", myCustomSecurity);
 		return mav;
 	}
 	
@@ -40,20 +45,31 @@ public class CourseCategoriesController {
     @GetMapping("/coursecategories/create")
     public ModelAndView create() {
 		
-		ModelAndView mav = new ModelAndView("coursecategory-create", "courseCategory", new CourseCategory());
+		ModelAndView mav = new ModelAndView("coursecategory-create", "courseCategory", new CourseCategoryDTO("b", "b"));
+		mav.addObject("myCustomSecurity", myCustomSecurity);
 		              
         return mav;
     }
 	
 	@IsElectiveCoursesCreate
     @PostMapping("/coursecategories/create")
-    public String create(@ModelAttribute @Validated CourseCategory newCourseCategory, BindingResult bindingResult) {
-		
+    public String create(@ModelAttribute("courseCategory") @Validated CourseCategoryDTO courseCategory, BindingResult bindingResult, Model model) {
+
         if (bindingResult.hasErrors()) {
   
             return "coursecategory-create";
         } else {
-        	courseCategoriesRepository.save(newCourseCategory);
+        	
+        	if(courseCategoriesService.doesCourseCategoryExists(courseCategory.getCategory())) {
+ 
+        		bindingResult.rejectValue("category", "error.category",
+                        "A 'Course Category' entity already exists with this identifier.");
+        		model.addAttribute("myCustomSecurity", myCustomSecurity);
+                return "coursecategory-create";
+        	}
+        	
+        	courseCategoriesService.saveCourseCategory(courseCategory);
+        	
             return "redirect:/coursecategories";
         }
         
@@ -63,7 +79,7 @@ public class CourseCategoriesController {
     @GetMapping("coursecategories/delete/{category}")
     public String delete(@PathVariable("category") String category) {
 		
-    	courseCategoriesRepository.deleteById(category);
+    	courseCategoriesService.deleteCourseCategory(category);
 
         return "redirect:/coursecategories";
     }
@@ -72,27 +88,27 @@ public class CourseCategoriesController {
     @GetMapping("/coursecategories/edit/{category}")
     public ModelAndView showUpdate(@PathVariable("category") String category) {
 
-		CourseCategory courseCategory = courseCategoriesRepository.findById(category)
-	    	      .orElseThrow(() -> new IllegalArgumentException("Invalid Course Category: " + category));
+		CourseCategoryDTO courseCategory = courseCategoriesService.getCourseCategory(category);
 		
 		ModelAndView mav = new ModelAndView("coursecategory-update", "courseCategory", courseCategory);
+		mav.addObject("myCustomSecurity", myCustomSecurity);
         return mav;
     }
 	
 	@IsElectiveCoursesUpdate
     @GetMapping("/coursecategories/update/{category}")
     public String update(@PathVariable("category") String categoryId, 
-    		@ModelAttribute @Validated CourseCategory category, 
+    		@ModelAttribute @Validated CourseCategoryDTO courseCategory, 
     		BindingResult bindingResult, Model model) {
 		
-		category.setCategory(categoryId);
+		courseCategory.setCategory(categoryId);
 
 		if (bindingResult.hasErrors()) {
         
             return "coursecategory-update";
         } else {
         	
-        	courseCategoriesRepository.save(category);
+        	courseCategoriesService.saveCourseCategory(courseCategory);
             return "redirect:/coursecategories";
         }
     }

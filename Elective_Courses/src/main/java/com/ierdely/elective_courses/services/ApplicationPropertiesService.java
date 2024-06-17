@@ -115,6 +115,11 @@ public class ApplicationPropertiesService {
 		return ApplicationEnrollmentStatus.UNKNOWN;
 	}
 	
+	public boolean isEnrollmentOpen() {
+		ApplicationEnrollmentStatus status = getEnrollmentStatus();
+		return !status.equals(ApplicationEnrollmentStatus.CLOSED);
+	}
+	
 	public void setEnrollmentStatus(ApplicationEnrollmentStatus newStatus) {
 		ApplicationProperty newProp = new ApplicationProperty(ApplicationProperty.KEY_ENROLLMENT_STATUS, newStatus.toString());
 		applicationPropertiesRepository.save(newProp);

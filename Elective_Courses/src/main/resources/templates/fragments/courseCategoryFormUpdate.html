@@ -28,7 +28,7 @@
 	            <a href="#" th:href="@{/coursecategories}" class="btn btn-outline-secondary">Cancel</a>
 	        </div>
 	        <div class="col-md-2">
-	            <button class="btn btn-primary btn-block" type="submit">Update</button>
+	            <button th:if="${myCustomSecurity.isEnrollmentOpen()}" class="btn btn-primary btn-block" type="submit">Update</button>
 	        </div>
 	    </div>
 	</form>

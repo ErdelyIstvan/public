@@ -6,7 +6,6 @@ import com.ierdely.elective_courses.enums.CourseEnrollmentStatus;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,6 +25,8 @@ public class EnrollmentDTO {
 	
 	@NotNull
 	private UserDTO user;
+	
+	Byte yearOfStudy;
 
 	@NotNull
 	private LocalDate enrollmentDate;

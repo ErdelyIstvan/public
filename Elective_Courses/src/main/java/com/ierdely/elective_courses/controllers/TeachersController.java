@@ -13,26 +13,31 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ierdely.elective_courses.entities.Teacher;
-import com.ierdely.elective_courses.repositories.TeachersRepository;
+import com.ierdely.elective_courses.dto.TeacherDTO;
+import com.ierdely.elective_courses.security.CustomSecurityExpression;
 import com.ierdely.elective_courses.security.annotations.teachers.IsTeachersCreate;
 import com.ierdely.elective_courses.security.annotations.teachers.IsTeachersDelete;
 import com.ierdely.elective_courses.security.annotations.teachers.IsTeachersRead;
 import com.ierdely.elective_courses.security.annotations.teachers.IsTeachersUpdate;
+import com.ierdely.elective_courses.services.TeachersService;
 
 @Controller
 public class TeachersController {
 	
 	@Autowired
-	private TeachersRepository teachersRepository;
+	private TeachersService teachersService;
+	
+	@Autowired
+	CustomSecurityExpression myCustomSecurity;
 	
 	@IsTeachersRead
 	@GetMapping("/teachers")
 	public ModelAndView index() {
 
-		List<Teacher> teachers = teachersRepository.findAll();
+		List<TeacherDTO> teachers = teachersService.getAllTeachers();
 		ModelAndView mav = new ModelAndView("teachers");
 		mav.addObject("teachers", teachers);
+		mav.addObject("myCustomSecurity", myCustomSecurity);
 		return mav;
 	}
 	
@@ -40,24 +45,24 @@ public class TeachersController {
     @GetMapping("/teachers/create")
     public ModelAndView create() {
 		
-		ModelAndView mav = new ModelAndView("teacher-create", "teacher", new Teacher());
+		ModelAndView mav = new ModelAndView("teacher-create", "teacher", new TeacherDTO());
 		              
         return mav;
     }
 	
 	@IsTeachersCreate
     @PostMapping("/teachers/create")
-    public String create(@ModelAttribute @Validated Teacher newTeacher, BindingResult bindingResult) {
+    public String create(@ModelAttribute @Validated TeacherDTO teacher, BindingResult bindingResult) {
 		
         if (bindingResult.hasErrors()) {
   
             return "teacher-create";
         } else {
-        	teachersRepository.save(newTeacher);
-    		List<Teacher> teachers = teachersRepository.findAll();
+
+        	teachersService.saveTeacher(teacher);
+    		List<TeacherDTO> teachers = teachersService.getAllTeachers();
     		ModelAndView mav = new ModelAndView("teachers");
     		mav.addObject("teachers", teachers);
-    		//return mav;
             return "redirect:/teachers";
         }
         
@@ -68,7 +73,7 @@ public class TeachersController {
     @GetMapping("teachers/delete/{id}")
     public String delete(@PathVariable("id") Integer id) {
 		
-    	teachersRepository.deleteById(id);
+    	teachersService.deleteTeacher(id);
 
         return "redirect:/teachers";
     }
@@ -78,9 +83,8 @@ public class TeachersController {
     @GetMapping("/teachers/edit/{id}")
     public ModelAndView showUpdate(@PathVariable("id") Integer id) {
 
-		Teacher teacher = teachersRepository.findById(id)
-	    	      .orElseThrow(() -> new IllegalArgumentException("Invalid Teacher Id:" + id));
-		
+		TeacherDTO teacher = teachersService.getTeacher(id);
+
 		ModelAndView mav = new ModelAndView("teacher-update", "teacher", teacher);
         return mav;
     }
@@ -88,7 +92,7 @@ public class TeachersController {
 	@IsTeachersUpdate
     @GetMapping("/teachers/update/{id}")
     public String update(@PathVariable("id") Integer id, 
-    		@ModelAttribute @Validated Teacher teacher, 
+    		@ModelAttribute @Validated TeacherDTO teacher, 
     		BindingResult bindingResult, Model model) {
 		
         if (bindingResult.hasErrors()) {
@@ -98,7 +102,7 @@ public class TeachersController {
         } else {
         	
         	teacher.setId(id);
-        	teachersRepository.save(teacher);
+        	teachersService.updateTeacher(id, teacher);
             return "redirect:/teachers";
         }
     }

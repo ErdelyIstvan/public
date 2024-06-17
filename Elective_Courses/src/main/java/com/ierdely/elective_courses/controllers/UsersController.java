@@ -8,7 +8,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,8 +16,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ierdely.elective_courses.dto.UserDTO;
-import com.ierdely.elective_courses.entities.User;
-import com.ierdely.elective_courses.security.annotations.IsAdmin;
+import com.ierdely.elective_courses.security.CustomSecurityExpression;
+import com.ierdely.elective_courses.security.annotations.users.IsUsersCreate;
+import com.ierdely.elective_courses.security.annotations.users.IsUsersDelete;
+import com.ierdely.elective_courses.security.annotations.users.IsUsersRead;
+import com.ierdely.elective_courses.security.annotations.users.IsUsersUpdate;
 import com.ierdely.elective_courses.services.ECUsersDetailedService;
 import com.ierdely.elective_courses.services.EnrollmentService;
 
@@ -32,6 +34,10 @@ public class UsersController {
 	@Autowired
 	private EnrollmentService  enrollmentsService;
 	
+	@Autowired
+	CustomSecurityExpression myCustomSecurityExpression;
+	
+	
 	@GetMapping("/users")
 	public ModelAndView index(Principal principal) {
 
@@ -40,23 +46,25 @@ public class UsersController {
 		List<UserDTO> users = usersService.getAllUsers();
 		ModelAndView mav = new ModelAndView("users");
 		mav.addObject("users", users);
+		mav.addObject("myCustomSecurity", myCustomSecurityExpression);
 		return mav;
 	}
 	
+	@IsUsersRead
 	@GetMapping("/pears")
 	public ModelAndView getPears(Principal principal) {
 
 		UserDTO loggedInUser = usersService.getUser(principal.getName());
 		
-		List<UserDTO> users = enrollmentsService.getPears(loggedInUser);
-		ModelAndView mav = new ModelAndView("users");
-		mav.addObject("users", users);
+		List<UserDTO> pears = enrollmentsService.getPears(loggedInUser);
+		ModelAndView mav = new ModelAndView("pears");
+		mav.addObject("pears", pears);
 		return mav;
 	}
 	
 
 	
-	@IsAdmin
+	@IsUsersCreate
     @GetMapping("/users/create")
     public ModelAndView create() {
 		
@@ -67,7 +75,7 @@ public class UsersController {
         return mav;
     }
 	
-	@IsAdmin
+	@IsUsersCreate
     @PostMapping("/users/create")
     public String create(@ModelAttribute("userDto") @Validated UserDTO userDto, BindingResult bindingResult, Model model) {
 		
@@ -89,7 +97,7 @@ public class UsersController {
         
     }
     
-	@IsAdmin
+	@IsUsersUpdate
     @GetMapping("/users/edit/{id}")
     public ModelAndView showUpdate(@PathVariable("id") Long id) {
 
@@ -101,7 +109,7 @@ public class UsersController {
         return mav;
     }
 	
-	@IsAdmin
+	@IsUsersUpdate
     @GetMapping("/users/update/{id}")
     public String update(@PathVariable("id") Integer id, 
     		@ModelAttribute @Validated UserDTO user, 
@@ -130,7 +138,7 @@ public class UsersController {
         }
     }
 
-	@IsAdmin
+	@IsUsersDelete
     @GetMapping("users/delete/{id}")
     public String delete(@PathVariable("id") Long id) {
 		

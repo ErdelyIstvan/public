@@ -7,12 +7,10 @@
 	    <div class="container">
 	        <div class="row">
 	            <div class="col-md-12 py-4">
-	                <h2 >Teachers List
-						
-	                <a href="#" th:href="@{/teachers/create}"  type="button" class="btn btn-primary" sec:authorize="hasRole('ADMIN')">Add Teacher</a>
-					</h2>
-	               <div th:replace="fragments/teachersList :: teachersList"></div>
-	
+	                <h2 >Teachers List</h2>
+	                <div th:replace="fragments/teachersList :: teachersList"></div>
+					<br>	
+	                <a href="#" th:href="@{/teachers/create}"  type="button" class="btn btn-primary" sec:authorize="hasRole('ADMIN')" th:if="${myCustomSecurity.isEnrollmentOpen()}">Add Teacher</a>
 	            </div>
 	        </div>
 	    </div>

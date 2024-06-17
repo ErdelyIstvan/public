@@ -53,11 +53,11 @@ public class User {
 	private Collection<Role> roles;
     
     @NotBlank(message="First name can not be blank.")
-    @Pattern(regexp = "[A-Za-z ]*", message = "First name contains illegal characters")
+    @Pattern(regexp = "[A-Za-z0-9 ]*", message = "First name contains illegal characters")
 	private String firstName;
 	
 	@NotBlank(message="Surname can not be blank.")
-    @Pattern(regexp = "[A-Za-z ]*", message = "Surname contains illegal characters")
+    @Pattern(regexp = "[A-Za-z0-9 ]*", message = "Surname contains illegal characters")
 	private String surname;
 	
 	@Min(value = 0, message = "Grade has to greater or equal than 0.")
@@ -68,7 +68,7 @@ public class User {
 	@Max(value = 5, message = "'Year of study' has to be smaller than or equal to 5.")
 	private byte studyYear;
 	
-	@Pattern(regexp = "[A-Za-z ]*", message = "Faculty Section contains illegal characters")
+	@Pattern(regexp = "[A-Za-z0-9 ]*", message = "Faculty Section contains illegal characters")
 	private String facultySection;
     
 }
