@@ -2,12 +2,17 @@ package com.ierdely.elective_courses.services;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,6 +31,7 @@ import com.ierdely.elective_courses.repositories.UsersRepository;
 import com.ierdely.elective_courses.security.annotations.users.IsUsersCreate;
 import com.ierdely.elective_courses.security.annotations.users.IsUsersDelete;
 import com.ierdely.elective_courses.security.annotations.users.IsUsersRead;
+import com.ierdely.elective_courses.security.annotations.users.IsUsersUpdate;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -120,6 +126,15 @@ public class ECUsersDetailedService implements UserDetailsService {
 	}
 	
 	
+	@IsUsersUpdate
+	public void resetPassword(Long id) {
+		
+		User persistentUser = usersRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException("User entity with id: " + id + " not found."));
+		persistentUser.setPassword(passwordEncoder.encode("s"));
+		usersRepository.save(persistentUser);
+	}
+	
 	@IsUsersCreate
 	public User saveUser(User user) {
 		
@@ -127,10 +142,61 @@ public class ECUsersDetailedService implements UserDetailsService {
 	}
 	
 	@IsUsersRead
-	public List<UserDTO> getAllUsers() {
+	public Page<UserDTO> getAllUsers(Pageable pageable) {
 		
-		return usersRepository.findAll().stream().map(user -> modelMapper.map(user, UserDTO.class))
+		int pageSize = pageable.getPageSize();
+		int currentPage = pageable.getPageNumber();
+		int startItem = currentPage * pageSize;
+		
+		
+	        
+		
+		List<UserDTO> repoList = usersRepository.findAllByOrderByRolesAscUsernameAsc().stream().map(user -> modelMapper.map(user, UserDTO.class))
 				.collect(Collectors.toList());
+		
+		List<UserDTO> retList;
+		
+		if (repoList.size() < startItem) {
+			
+			retList = Collections.emptyList();
+		} else {
+			
+			int toIndex = Math.min(startItem + pageSize, repoList.size());
+			retList = repoList.subList(startItem, toIndex);
+		}
+		return new PageImpl<>(retList, PageRequest.of(currentPage, pageSize), repoList.size());
+		
+	}
+	
+	@IsUsersRead
+	public Page<UserDTO> getAllUsers(Pageable pageable, Integer yearOfStudy) {
+		
+		if( yearOfStudy == null) {
+			return getAllUsers(pageable);
+		}
+		
+		int pageSize = pageable.getPageSize();
+		int currentPage = pageable.getPageNumber();
+		int startItem = currentPage * pageSize;
+		
+		
+	        
+		
+		List<UserDTO> repoList = usersRepository.findAllByStudyYearOrderByRolesAscUsernameAsc(yearOfStudy).stream().map(user -> modelMapper.map(user, UserDTO.class))
+				.collect(Collectors.toList());
+		
+		List<UserDTO> retList;
+		
+		if (repoList.size() < startItem) {
+			
+			retList = Collections.emptyList();
+		} else {
+			
+			int toIndex = Math.min(startItem + pageSize, repoList.size());
+			retList = repoList.subList(startItem, toIndex);
+		}
+		return new PageImpl<>(retList, PageRequest.of(currentPage, pageSize), repoList.size());
+		
 	}
 	
 	@IsUsersRead

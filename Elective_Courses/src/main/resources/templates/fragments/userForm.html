@@ -64,8 +64,15 @@
 
 	</div>
 	<div class="row">
+		<div class="col-md-4 mb-3">
+			<input type="hidden" name="page" th:value="${page}" />
+			<input type="hidden" name="year" th:value="${year}" />
+		</div>
+	</div>
+	
+	<div class="row">
 	    <div class="col-md-1">
-	        <a href="#" th:href="@{/users}" class="btn btn-outline-secondary">Cancel</a>
+	        <a href="#" th:href="@{/users(page=${page}, year=${year})}" class="btn btn-outline-secondary">Cancel</a>
 	    </div>
 		<div class="col-md-2">
 		    <button class="btn btn-primary btn-block" type="submit">Add</button>

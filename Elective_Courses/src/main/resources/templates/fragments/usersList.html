@@ -4,7 +4,7 @@
 <body>
 	
     <div class="row">
-        <div class="col-md-4" th:if="${users.isEmpty()}">
+        <div class="col-md-4" th:if="${userPage.isEmpty()}">
             <div class="alert alert-warning" role="alert">
                 No USER defined yet.
             </div>
@@ -16,31 +16,29 @@
 			<th>Id</th>
 			<th>Username</th>
 			<th>Roles</th>
-			<th>First Name</th>
-			<th>Surname</th>
+			<th>Name</th>
 			<th>Grade</th>
 			<th>Year of study</th>
 			<th>Section</th>
 			<th>Actions</th>
 		</tr>
 		
-		<tr th:each="user:${users}">
+		<tr th:each="user:${userPage.content}">
 			<td th:text="${user.id}"></td>
 			<td th:text="${user.username}"></td>
 			<td>
 			        <span th:each="role : ${user.roles}" th:text="${role.name} + ' '"></span>
 			</td>
-			<td th:text="${user.firstName}"></td>
-			<td th:text="${user.surname}"></td>
+			<td th:text="${user.firstName} + ' ' + ${user.surname}"></td>
 			<td th:text="${user.grade}"></td>
 			<td th:text="${user.studyYear}"></td>
 			<td th:text="${user.facultySection}"></td>				
 			<td>	
-				<a sec:authorize="hasRole('ADMIN')" th:if="${myCustomSecurity.isEnrollmentOpen()}" href="#" th:href="@{'/users/edit/'+${user.id}}" type="button" class="btn btn-primary">Edit</a>
-				<a sec:authorize="hasRole('ADMIN')" th:if="${myCustomSecurity.isEnrollmentOpen()}"  href="#" th:href="@{'/users/delete/'+${user.id}}" type="button" class="btn btn-outline-danger">Delete</a>
+				<a sec:authorize="hasRole('ADMIN')" th:if="${myCustomSecurity.isEnrollmentOpen()}" href="#" th:href="@{/users/edit/{id}(id=${user.id}, page=${page}, year=${year})}" type="button" class="btn btn-primary">Edit</a>
+				<a sec:authorize="hasRole('ADMIN')" th:if="${myCustomSecurity.isEnrollmentOpen()}"  href="#" th:href="@{/users/delete/{id}(id=${user.id}, page=${page}, year=${year})}" type="button" class="btn btn-outline-danger">Delete</a>
+				<a sec:authorize="hasRole('ADMIN')" th:if="${myCustomSecurity.isEnrollmentOpen()}"  href="#" th:href="@{/users/resetpassword/{id}(id=${user.id}, page=${page}, year=${year})}" type="button" class="btn btn-outline-danger">ResetPassword</a>
 			</td>
 		</tr>
-	
 	</table>
 </body>
 </html>
